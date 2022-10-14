@@ -8,6 +8,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.security.SecureRandom;
+
 public class printGrid {
    
     public static void main(String[] args) {
@@ -31,16 +35,56 @@ public class printGrid {
 }
 
 class MyPanel extends JPanel {
-    private int posX=0,posY=0;
+    private volatile int posX=0,posY=0;
     private int widthSize=480,heightSize=480;
     private int offset=40;
     private int nRows=10,nColumns=10;
-    private int fps=1;
+    private int fps=60;
+    private SecureRandom rdm= new SecureRandom();
+    private volatile int[][] grid=new int[nRows][nColumns];
     public MyPanel() {
         setBorder(BorderFactory.createLineBorder(Color.black));
+        setupGrid();
         gameLoop.start();
+        processing.start();
     }
-    private Thread gameLoop = new Thread(() -> {
+    private void setupGrid(){
+        for (int i=0;i<nRows;i++){
+            for (int j=0;j<nColumns;j++){
+                grid[i][j]=0;
+            }
+        }
+
+    }
+    private Thread processing = new Thread(()->{
+        while (true){
+            //Bouge la position du cercle toutes les deux secondes
+            posX++;
+            if(posX==nColumns){
+                posY++;
+                posX=0;
+            }
+            if (posY==nRows){
+                posY=0;
+            }
+            //Modifie aléatoirement chacun des éléments du tableau ( 1 veut dire qu'il faut afficher un cercle , 0 qu'il ne faut rien afficher)
+            
+            int temp=0;
+            for (int i=0;i<nRows;i++){
+                for (int j=0;j<nColumns;j++){
+                    temp=rdm.nextInt(0,2);
+                    
+                    grid[i][j]=temp;
+                }
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+            }
+
+        }
+    });
+    private Thread gameLoop = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
         while (true) {
             
             this.repaint();
@@ -48,46 +92,46 @@ class MyPanel extends JPanel {
                 Thread.sleep(1000/fps);
             } catch (InterruptedException ex) {
             }
-            posX++;
-            if(posX>nColumns){
-                posY++;
-                posX=0;
-            }
-            if (posY>nRows){
-                posY=0;
-            }
-
-            
+           
+        
         }
     });
     public Dimension getPreferredSize() {
         return new Dimension(widthSize,heightSize);
     }
-    void drawLines(Graphics g) {
+    void drawGrid(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int x1,x2,y1,y2;
         int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont est la nouvelle largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON); 
 
-        for (int i =0;i<=nRows+1;i++){
+        for (int i =0;i<=nRows;i++){
             x1=offset;
-            y1=offset+newHeight*i/(nRows+1);
+            y1=offset+newHeight*i/nRows;
             x2=offset+newWidth;
-            y2=offset+newHeight*i/(nRows+1);
+            y2=offset+newHeight*i/nRows;
             g2d.drawLine(x1,y1,x2,y2);
             
         }
-        for(int j=0;j<=nColumns+1;j++){
-            x1=offset +newHeight*j/(nRows+1);
+        for(int j=0;j<=nColumns;j++){
+            x1=offset +newHeight*j/nRows;
             y1=offset;
-            x2=offset+newWidth*j/(nColumns+1);
+            x2=offset+newWidth*j/nColumns;
             y2=offset+newHeight;
             g2d.drawLine(x1,y1,x2,y2);
         }
-        g2d.fillOval(offset+newHeight*posX/(nRows+1),offset+newHeight*posY/(nRows+1),newWidth/(nColumns+1),newHeight/(nRows+1));
-        //System.println(offset+newWidth/(2*nColumns),offset+newHeight/(2*nRows),newWidth/nColumns,newHeight/nRows)
-        //g2d.drawOval(150,150,150,150);
+        //affiche le cerle
+        //g2d.fillOval(offset+newHeight*posX/nRows+2,offset+newHeight*posY/nRows+2,newWidth/nColumns-4,newHeight/nRows-4);
+        //affiche l'état du tableau actuel
+        for (int j=0;j<nRows;j++){
+            for (int i=0;i<nColumns;i++){
+                if(grid[i][j]==1){
+                    g2d.fillOval(offset+newHeight*j/nColumns+2,offset+newHeight*i/nRows+2,newWidth/nColumns-4,newHeight/nRows-4);
+                }
+                
+            }
+        }
       
       //faire un tableau contenant les coordonnées de chaque cases
       //afficher le tableau relativement à la grille que l'on a créé
@@ -97,6 +141,6 @@ class MyPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);      
-        drawLines(g);
+        drawGrid(g);
     }  
 }
