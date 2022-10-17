@@ -15,6 +15,8 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JButton;
+import java.awt.event.*;  
 
 import java.security.SecureRandom;
 
@@ -62,6 +64,8 @@ class MyPanel extends JPanel {
         gameLoop.start();
         //Démarrage de la boucle de logique de la simulation
         processing.start();
+
+        
     }
 
     //Fonction qui permet de configurer la simulation si l'utilisateur le veut . Sinon on prend les paramètres par défauts
@@ -223,7 +227,15 @@ class MyPanel extends JPanel {
             BufferedImage outputImage = new BufferedImage(widthSize, heightSize, BufferedImage.TYPE_INT_RGB);
             outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
             
-            drawSprite((Graphics2D)g, outputImage, getBounds(), 0, 0, widthSize, heightSize);     
+            drawSprite((Graphics2D)g, outputImage, getBounds(), 0, 0, widthSize, heightSize);    
+            
+            /* 
+            JButton b=new JButton("Click Here");  
+        b.setBounds(50,100,95,30);  
+        b.addActionListener(new ActionListener(){  
+            public void actionPerformed(ActionEvent e){  
+                          
+                    }   });*/
         }
         catch (IOException ex) {
             System.err.println(ex.getMessage());
