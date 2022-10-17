@@ -41,7 +41,7 @@ public class printGrid {
 
 class MyPanel extends JPanel {
     private volatile int posX=0,posY=0;
-    private int widthSize=480,heightSize=480;
+    private int widthSize=600,heightSize=600;
     private int offset=40;
     private int nRows=10,nColumns=10;
     private int fps=60;
@@ -204,7 +204,7 @@ class MyPanel extends JPanel {
         
         super.paintComponent(g);
         try{
-            BufferedImage bufferedImage = ImageIO.read(new File("sprites/symbole_air.jpg"));
+            BufferedImage bufferedImage = ImageIO.read(new File("sprites/fond_écran.png"));
             Image resultingImage = bufferedImage.getScaledInstance(widthSize, heightSize, Image.SCALE_DEFAULT);
             BufferedImage outputImage = new BufferedImage(widthSize, heightSize, BufferedImage.TYPE_INT_RGB);
             outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
