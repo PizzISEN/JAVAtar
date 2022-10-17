@@ -18,43 +18,53 @@ import java.awt.image.BufferedImage;
 
 import java.security.SecureRandom;
 
-public class printGrid {
-   
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI(); 
-            }
-        });
-    }
+public class printGrid 
+    {
+    
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    createAndShowGUI(); 
+                }
+            });
+        }
 
-    private static void createAndShowGUI() {
-        JFrame f = new JFrame("Javatar");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setLocationRelativeTo(null);
-        f.setResizable(false);
-        f.add(new MyPanel());
-        f.pack();
-        f.setVisible(true);
+        //Préparation de l'interface graphique et affichage
+        private static void createAndShowGUI() {
+            JFrame f = new JFrame("Javatar");
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f.setLocationRelativeTo(null);
+            f.setResizable(false);
+            f.add(new MyPanel());
+            f.pack();
+            f.setVisible(true);
+        }
     }
-}
 
 class MyPanel extends JPanel {
     private volatile int posX=0,posY=0;
-    private int widthSize=600,heightSize=600;
-    private int offset=40;
+    private int widthSize=800,heightSize=800;
+    private int offset=80;
     private int nRows=10,nColumns=10;
     private int fps=60;
     private SecureRandom rdm= new SecureRandom();
     public static final AffineTransform IDENTITY = new AffineTransform();
     private volatile int[][] grid=new int[nRows][nColumns];
+
     public MyPanel() {
+
+        //Configuration et création de la fenêtre dans l'interface graphique 
         setBorder(BorderFactory.createLineBorder(Color.black));
         personnalSetup();
         setupGrid();
+
+        //Démarrage de la boucle d'affichage 
         gameLoop.start();
+        //Démarrage de la boucle de logique de la simulation
         processing.start();
     }
+
+    //Fonction qui permet de configurer la simulation si l'utilisateur le veut . Sinon on prend les paramètres par défauts
     private void personnalSetup(){
         System.out.println("Voulez-vous configurer la fenêtre de la simulation? (Y)es/(N)o");
         String tmp=System.console().readLine();
@@ -80,8 +90,17 @@ class MyPanel extends JPanel {
         }
 
     };
-    
+    //Initialise toutes les valeurs de grid à 0 
+    private void setupGrid(){
+        for (int i=0;i<nRows;i++){
+            for (int j=0;j<nColumns;j++){
+                grid[i][j]=0;
+            }
+        }
 
+    }
+
+    //Affiche un sprite 
     public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
             Rectangle source, float x, float y, float width, float height) {
         int halfWidth = (int) (width * 0.5);
@@ -93,7 +112,7 @@ class MyPanel extends JPanel {
                 source.y + source.height, null);
         gr.setTransform(IDENTITY);
     }
-
+    //Affiche un sprite avec une rotation
     public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
             Rectangle source, float x, float y, float width, float height,
             float radians) {
@@ -107,60 +126,13 @@ class MyPanel extends JPanel {
                 source.y + source.height, null);
         gr.setTransform(IDENTITY);
     }
-    private void setupGrid(){
-        for (int i=0;i<nRows;i++){
-            for (int j=0;j<nColumns;j++){
-                grid[i][j]=0;
-            }
-        }
-
-    }
-    private Thread processing = new Thread(()->{
-        while (true){
-            //Bouge la position du cercle toutes les deux secondes
-            posX++;
-            if(posX==nColumns){
-                posY++;
-                posX=0;
-            }
-            if (posY==nRows){
-                posY=0;
-            }
-            //Modifie aléatoirement chacun des éléments du tableau ( 1 veut dire qu'il faut afficher un cercle , 0 qu'il ne faut rien afficher)
-            
-            int temp=0;
-            for (int i=0;i<nRows;i++){
-                for (int j=0;j<nColumns;j++){
-                    temp=rdm.nextInt(0,2);
-                    
-                    grid[i][j]=temp;
-                }
-            }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-            }
-
-        }
-    });
-   
-    private Thread gameLoop = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
-        while (true) {
-            
-            this.repaint();
-            try {
-                Thread.sleep(1000/fps);
-            } catch (InterruptedException ex) {
-            }
-           
-        
-        }
-    });
-   
+    
     public Dimension getPreferredSize() {
         return new Dimension(widthSize,heightSize);
     }
-    void drawGrid(Graphics g) {
+
+    //Fonction qui affiche l'état de la simulation contenu dans grid 
+    public void drawGrid(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int x1,x2,y1,y2;
         int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont est la nouvelle largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
@@ -182,8 +154,7 @@ class MyPanel extends JPanel {
             y2=offset+newHeight;
             g2d.drawLine(x1,y1,x2,y2);
         }
-        //affiche le cerle
-        //g2d.fillOval(offset+newHeight*posX/nRows+2,offset+newHeight*posY/nRows+2,newWidth/nColumns-4,newHeight/nRows-4);
+        
         //affiche l'état du tableau actuel
         for (int j=0;j<nRows;j++){
             for (int i=0;i<nColumns;i++){
@@ -200,6 +171,49 @@ class MyPanel extends JPanel {
  
     }
 
+    //Thread qui s'occupe de modifier la position aléatoirement la position des cercles dans le tableau aléatoirement
+    private Thread processing = new Thread(()->{
+        while (true){
+            //Bouge la position du cercle toutes les deux secondes
+            posX++;
+            if(posX==nColumns){
+                posY++;
+                posX=0;
+            }
+            if (posY==nRows){
+                posY=0;
+            }
+            //Modifie aléatoirement chacun des éléments du tableau ( 1 veut dire qu'il faut afficher un cercle , 0 qu'il ne faut rien afficher)
+            
+            int temp=0;
+            for (int i=0;i<nRows;i++){
+                for (int j=0;j<nColumns;j++){
+                    temp=rdm.nextInt(2);
+                    
+                    grid[i][j]=temp;
+                }
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+            }
+
+        }
+    });
+   
+    //Thread qui s'occupe d'actualiser la fenêtre graphique 
+    private Thread gameLoop = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
+        while (true) {
+            
+            this.repaint();
+            try {
+                Thread.sleep(1000/fps);
+            } catch (InterruptedException ex) {
+            }
+        }
+    });
+   
+     
     public void paintComponent(Graphics g) {
         
         super.paintComponent(g);
@@ -216,5 +230,5 @@ class MyPanel extends JPanel {
             ex.printStackTrace();
         }
         drawGrid(g);
-    }  
+    } 
 }
