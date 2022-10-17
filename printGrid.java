@@ -1,15 +1,21 @@
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
-import java.util.List;
-import java.util.ArrayList;
+
 import java.security.SecureRandom;
 
 public class printGrid {
@@ -23,11 +29,10 @@ public class printGrid {
     }
 
     private static void createAndShowGUI() {
-        System.out.println("Created GUI on EDT? "+
-        SwingUtilities.isEventDispatchThread());
-        JFrame f = new JFrame("Swing Paint Demo");
+        JFrame f = new JFrame("Javatar");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLocationRelativeTo(null);
+        f.setResizable(false);
         f.add(new MyPanel());
         f.pack();
         f.setVisible(true);
@@ -41,12 +46,66 @@ class MyPanel extends JPanel {
     private int nRows=10,nColumns=10;
     private int fps=60;
     private SecureRandom rdm= new SecureRandom();
+    public static final AffineTransform IDENTITY = new AffineTransform();
     private volatile int[][] grid=new int[nRows][nColumns];
     public MyPanel() {
         setBorder(BorderFactory.createLineBorder(Color.black));
+        personnalSetup();
         setupGrid();
         gameLoop.start();
         processing.start();
+    }
+    private void personnalSetup(){
+        System.out.println("Voulez-vous configurer la fenêtre de la simulation? (Y)es/(N)o");
+        String tmp=System.console().readLine();
+        while(!tmp.equals("Yes")&&!tmp.equals("No")&&!tmp.equals("Y")&&!tmp.equals("N")&&!tmp.equals(""))
+        {
+            System.out.println("Voulez-vous configurer la fenêtre de la simulation? (Y)es/(N)o");
+            tmp=System.console().readLine();
+            
+        }
+        if (tmp.equals("Yes")||tmp.equals("Y")){
+            System.out.println("Nombre de lignes?");
+            nRows=Integer.parseInt(System.console().readLine());
+            System.out.println("Nombre de Colonnes?");
+            nColumns=Integer.parseInt(System.console().readLine());
+            grid=new int[nRows][nColumns];
+
+            System.out.println("Longueur de la fenêtre (en px)?");
+            widthSize=Integer.parseInt(System.console().readLine());
+            System.out.println("Hauteur de la fenêtre (en px)?");
+            heightSize=Integer.parseInt(System.console().readLine());
+            System.out.println("offset (en px)?");
+            offset=Integer.parseInt(System.console().readLine());
+        }
+
+    };
+    
+
+    public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
+            Rectangle source, float x, float y, float width, float height) {
+        int halfWidth = (int) (width * 0.5);
+        int halfHeight = (int) (height * 0.5);
+
+        gr.translate(x, y);//from   ww  w.java2  s .co m
+        gr.drawImage(tilesheet, 0, 0, (int)width,
+                (int)height, source.x, source.y, source.x + source.width,
+                source.y + source.height, null);
+        gr.setTransform(IDENTITY);
+    }
+
+    public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
+            Rectangle source, float x, float y, float width, float height,
+            float radians) {
+        int halfWidth = (int) (width * 0.5);
+        int halfHeight = (int) (height * 0.5);
+
+        gr.translate(x, y);
+        gr.rotate(radians);
+        gr.drawImage(tilesheet, -halfWidth, -halfHeight, halfWidth,
+                halfHeight, source.x, source.y, source.x + source.width,
+                source.y + source.height, null);
+        gr.setTransform(IDENTITY);
     }
     private void setupGrid(){
         for (int i=0;i<nRows;i++){
@@ -84,6 +143,7 @@ class MyPanel extends JPanel {
 
         }
     });
+   
     private Thread gameLoop = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
         while (true) {
             
@@ -96,6 +156,7 @@ class MyPanel extends JPanel {
         
         }
     });
+   
     public Dimension getPreferredSize() {
         return new Dimension(widthSize,heightSize);
     }
@@ -140,7 +201,20 @@ class MyPanel extends JPanel {
     }
 
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);      
+        
+        super.paintComponent(g);
+        try{
+            BufferedImage bufferedImage = ImageIO.read(new File("sprites/symbole_air.jpg"));
+            Image resultingImage = bufferedImage.getScaledInstance(widthSize, heightSize, Image.SCALE_DEFAULT);
+            BufferedImage outputImage = new BufferedImage(widthSize, heightSize, BufferedImage.TYPE_INT_RGB);
+            outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+            
+            drawSprite((Graphics2D)g, outputImage, getBounds(), 0, 0, widthSize, heightSize);     
+        }
+        catch (IOException ex) {
+            System.err.println(ex.getMessage());
+            ex.printStackTrace();
+        }
         drawGrid(g);
     }  
 }
