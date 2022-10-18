@@ -13,16 +13,14 @@ public class Humain {
         this.vivant = true;
     }
 
-    private void bouge() {}
-    
-    public void rencontre() {}
-
     public void changerPosition(int x, int y) {
         this.posX = x;
         this.posY = y;
     }
+    
+    public void rencontre() {}
 
-    public void creve() {
+    public void mort() {
         this.vivant = false;
     }
 }
