@@ -1,4 +1,4 @@
-public class Humain {
+public abstract class Humain {
     private int posX = 0;
     private int posY = 0;
     private String[] messages;
@@ -18,7 +18,7 @@ public class Humain {
         this.posY = y;
     }
     
-    public void rencontre() {}
+    public void rencontre(Humain h){}
 
     public void mort() {
         this.vivant = false;
