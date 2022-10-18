@@ -1,5 +1,3 @@
-import java.lang.reflect.Array;
-
 public class Case {
     public int type;
     private int coordX ;
@@ -11,11 +9,8 @@ public class Case {
         this.type = t;
     }
     
-    public Case(){
-        
+    public int[] getCoord(){
+        int [] arr = {this.coordX, this.coordY};
+        return arr;
     }
-
-    /*public Array getCoord(){
-
-    }*/
 }
