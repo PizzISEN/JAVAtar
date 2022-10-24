@@ -11,6 +11,7 @@ public class Nomades_de_l_air extends Humain{
     @Override
     public void rencontre(Humain h){
         if(h.getEquipe() == this.getEquipe()) {
+            System.out.println("Copain air");
             this.partagerMessages(h);
         } else {
             int dePerso = lancerDeDes();
@@ -20,6 +21,8 @@ public class Nomades_de_l_air extends Humain{
                 h.mort();
             } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "feu")) {
                 this.mort();
+            } else {
+                h.mort();
             }
         }
     }

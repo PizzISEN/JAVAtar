@@ -5,8 +5,7 @@ public abstract class Humain {
     private Coord pos = new Coord();
     private ArrayList<String> messages = new ArrayList<String>();
     private Coord futurePos = new Coord();
-
-    public boolean vivant;
+    private boolean vivant;
 
     public Humain(int x, int y) {
         this.pos.x = x;
@@ -48,6 +47,10 @@ public abstract class Humain {
         this.vivant = false;
     }
 
+    public Boolean estVivant() {
+        return this.vivant;
+    }
+
     public void partagerMessages(Humain h) {
         ArrayList<String> additionMessages = h.getMessages();
             
@@ -63,7 +66,6 @@ public abstract class Humain {
     
     public int lancerDeDes() {
         SecureRandom rand = new SecureRandom();
-
         return rand.nextInt(6);
     }
 

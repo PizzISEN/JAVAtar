@@ -11,6 +11,7 @@ public class Royaume_de_la_terre extends Humain{
     @Override
     public void rencontre(Humain h){
         if(h.getEquipe() == this.getEquipe()) {
+            System.out.println("Copain terre");
             this.partagerMessages(h);
         } else {
             int dePerso = lancerDeDes();
@@ -18,8 +19,10 @@ public class Royaume_de_la_terre extends Humain{
 
             if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "eau")) {
                 h.mort();
-            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "terre")) {
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "air")) {
                 this.mort();
+            } else {
+                h.mort();
             }
         }
     }

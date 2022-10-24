@@ -11,6 +11,7 @@ public class Tribus_de_l_eau extends Humain{
     @Override
     public void rencontre(Humain h){
         if(h.getEquipe() == this.getEquipe()) {
+            System.out.println("Copain eau");
             this.partagerMessages(h);
         } else {
             int dePerso = lancerDeDes();
@@ -20,6 +21,8 @@ public class Tribus_de_l_eau extends Humain{
                 h.mort();
             } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "terre")) {
                 this.mort();
+            } else {
+                h.mort();
             }
         }
     }
