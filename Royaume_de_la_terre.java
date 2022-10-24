@@ -2,6 +2,12 @@ public class Royaume_de_la_terre extends Humain{
     public Royaume_de_la_terre(){
         super(0, 0);
     }
+
+    @Override
+    public String getEquipe() {
+        return "terre";
+    }
+
     @Override
     public void rencontre(Humain h){}
 }
