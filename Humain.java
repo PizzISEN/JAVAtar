@@ -39,8 +39,25 @@ public abstract class Humain {
         this.messages.add(m);
     }
 
+    public void setMessages(ArrayList<String> m) {
+        this.messages = m;
+    }
+
     public void mort() {
         this.vivant = false;
+    }
+
+    public void partagerMessages(Humain h) {
+        ArrayList<String> additionMessages = h.getMessages();
+            
+        for (String message : this.getMessages()) {
+            if(!additionMessages.contains(message)) {
+                additionMessages.add(message);
+            }
+        }
+
+        h.setMessages(additionMessages);
+        this.setMessages(additionMessages);
     }
     
     public abstract String getEquipe();
