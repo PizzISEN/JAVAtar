@@ -15,11 +15,20 @@ public abstract class Humain {
         return this.messages;
     }
 
-    public Coord getPosition() {
+    public Coord getPos() {
         return this.pos;
     }
 
-    public void changerPosition(int x, int y) {
+    public Coord getFuturePos() {
+        return this.futurePos;
+    }
+
+    public void setPos(int x, int y) {
+        this.pos.x = x;
+        this.pos.y = y;
+    }
+
+    public void setFuturePos(int x, int y) {
         this.pos.x = x;
         this.pos.y = y;
     }
