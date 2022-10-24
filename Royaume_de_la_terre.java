@@ -11,7 +11,6 @@ public class Royaume_de_la_terre extends Humain{
     @Override
     public void rencontre(Humain h){
         if(h.getEquipe() == this.getEquipe()) {
-            System.out.println("Copain terre");
             this.partagerMessages(h);
         } else {
             int dePerso = lancerDeDes();
