@@ -38,10 +38,11 @@ public abstract class Humain {
     public void ajouterMessage(String m) {
         this.messages.add(m);
     }
-    
-    public void rencontre(Humain h){}
 
     public void mort() {
         this.vivant = false;
     }
+    
+    public abstract String getEquipe();
+    public abstract void rencontre(Humain h);
 }
