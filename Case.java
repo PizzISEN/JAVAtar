@@ -11,4 +11,8 @@ public class Case {
     public Coord getCoord(){
         return coord;
     }
+
+    public void setType(int t){
+        this.type = t;
+    }
 }
