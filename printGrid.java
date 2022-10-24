@@ -17,6 +17,8 @@ import java.awt.BasicStroke;
 import java.awt.Image;
 import java.awt.geom.Line2D;
 
+import javax.swing.JButton;
+import java.awt.event.*;  
 
 import java.security.SecureRandom;
 
@@ -75,6 +77,8 @@ class MyPanel extends JPanel {
         gameLoop.start();
         //Démarrage de la boucle de logique de la simulation
         processing.start();
+
+        
     }
 
     //Fonction qui permet de configurer la simulation si l'utilisateur le veut . Sinon on prend les paramètres par défauts
@@ -267,8 +271,20 @@ class MyPanel extends JPanel {
             BufferedImage bufferedImage = ImageIO.read(new File("sprites/fond_écran.png"));
             Image resultingImage = bufferedImage.getScaledInstance(widthSize, heightSize, Image.SCALE_DEFAULT);
             
+<<<<<<< HEAD
             
             g.drawImage(resultingImage, 0, 0, null);     
+=======
+            drawSprite((Graphics2D)g, outputImage, getBounds(), 0, 0, widthSize, heightSize);    
+            
+            /* 
+            JButton b=new JButton("Click Here");  
+        b.setBounds(50,100,95,30);  
+        b.addActionListener(new ActionListener(){  
+            public void actionPerformed(ActionEvent e){  
+                          
+                    }   });*/
+>>>>>>> 596eeb10a89232842762d57026278e758709afcd
         }
         catch (IOException ex) {
             System.err.println(ex.getMessage());
