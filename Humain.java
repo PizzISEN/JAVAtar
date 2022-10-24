@@ -1,21 +1,27 @@
 public abstract class Humain {
-    private int posX = 0;
-    private int posY = 0;
+    private Coord pos = new Coord();
     private String[] messages;
-    private int futurX = 0;
-    private int futurY = 0;
+    private Coord futurePos = new Coord();
 
     public boolean vivant;
 
     public Humain(int x, int y) {
-        this.posX = x;
-        this.posY = y;
+        this.pos.x = x;
+        this.pos.y = y;
         this.vivant = true;
     }
 
+    public String[] getMessages() {
+        return this.messages;
+    }
+
+    public Coord getPosition() {
+        return this.pos;
+    }
+
     public void changerPosition(int x, int y) {
-        this.posX = x;
-        this.posY = y;
+        this.pos.x = x;
+        this.pos.y = y;
     }
     
     public void rencontre(Humain h){}
