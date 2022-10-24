@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.security.SecureRandom;
 
 public abstract class Humain {
     private Coord pos = new Coord();
@@ -60,6 +61,12 @@ public abstract class Humain {
         this.setMessages(additionMessages);
     }
     
+    public int lancerDeDes() {
+        SecureRandom rand = new SecureRandom();
+
+        return rand.nextInt(6);
+    }
+
     public abstract String getEquipe();
     public abstract void rencontre(Humain h);
 }

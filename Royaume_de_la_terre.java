@@ -9,5 +9,18 @@ public class Royaume_de_la_terre extends Humain{
     }
 
     @Override
-    public void rencontre(Humain h){}
+    public void rencontre(Humain h){
+        if(h.getEquipe() == this.getEquipe()) {
+            this.partagerMessages(h);
+        } else {
+            int dePerso = lancerDeDes();
+            int deAdverse = lancerDeDes();
+
+            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "eau")) {
+                h.mort();
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "terre")) {
+                this.mort();
+            }
+        }
+    }
 }
