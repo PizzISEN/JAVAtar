@@ -2,7 +2,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.imageio.ImageIO;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.BorderFactory;
@@ -14,6 +13,9 @@ import java.awt.RenderingHints;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.BasicStroke;
+import java.awt.Image;
+import java.awt.geom.Line2D;
 
 
 import java.security.SecureRandom;
@@ -47,10 +49,21 @@ class MyPanel extends JPanel {
     private int offset=80;
     private int nRows=10,nColumns=10;
     private int fps=60;
+    private int lineThickness=5;
+    private int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont les nouvelles largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
     private SecureRandom rdm= new SecureRandom();
-    public static final AffineTransform IDENTITY = new AffineTransform();
+  
     private volatile int[][] grid=new int[nRows][nColumns];
 
+    //Création des références pour les images liés à chacune des tribus
+    private BufferedImage image=null;
+    private Image fire_tribe_resultingImage=null;
+    private Image water_tribe_resultingImage=null;
+    private Image air_tribe_resultingImage=null;
+    private Image earth_tribe_resultingImage=null;
+    private Image stone_resultingImage=null;
+
+    
     public MyPanel() {
 
         //Configuration et création de la fenêtre dans l'interface graphique 
@@ -88,6 +101,47 @@ class MyPanel extends JPanel {
             System.out.println("offset (en px)?");
             offset=Integer.parseInt(System.console().readLine());
         }
+        //Une fois que le jeu a été configuré , on peut charger les images relativement à la taille réelle de la fenêtre
+        try {
+            image=ImageIO.read(new File("sprites/fire_tribe.png"));
+            fire_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/earth_tribe.png"));
+            earth_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/water_tribe.png"));
+            water_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/air_tribe.png"));
+            air_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/stone.png"));
+            stone_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     };
     //Initialise toutes les valeurs de grid à 0 
@@ -100,32 +154,8 @@ class MyPanel extends JPanel {
 
     }
 
-    //Affiche un sprite 
-    public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
-            Rectangle source, float x, float y, float width, float height) {
-        int halfWidth = (int) (width * 0.5);
-        int halfHeight = (int) (height * 0.5);
-
-        gr.translate(x, y);//from   ww  w.java2  s .co m
-        gr.drawImage(tilesheet, 0, 0, (int)width,
-                (int)height, source.x, source.y, source.x + source.width,
-                source.y + source.height, null);
-        gr.setTransform(IDENTITY);
-    }
-    //Affiche un sprite avec une rotation
-    public static void drawSprite(Graphics2D gr, BufferedImage tilesheet,
-            Rectangle source, float x, float y, float width, float height,
-            float radians) {
-        int halfWidth = (int) (width * 0.5);
-        int halfHeight = (int) (height * 0.5);
-
-        gr.translate(x, y);
-        gr.rotate(radians);
-        gr.drawImage(tilesheet, -halfWidth, -halfHeight, halfWidth,
-                halfHeight, source.x, source.y, source.x + source.width,
-                source.y + source.height, null);
-        gr.setTransform(IDENTITY);
-    }
+    
+    
     
     public Dimension getPreferredSize() {
         return new Dimension(widthSize,heightSize);
@@ -135,16 +165,18 @@ class MyPanel extends JPanel {
     public void drawGrid(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int x1,x2,y1,y2;
-        int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont est la nouvelle largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON); 
 
+        
+        //Affichage de la grille
+        g2d.setStroke(new BasicStroke(lineThickness));
         for (int i =0;i<=nRows;i++){
             x1=offset;
             y1=offset+newHeight*i/nRows;
             x2=offset+newWidth;
             y2=offset+newHeight*i/nRows;
-            g2d.drawLine(x1,y1,x2,y2);
+            g2d.draw(new Line2D.Float(x1,y1,x2,y2));
             
         }
         for(int j=0;j<=nColumns;j++){
@@ -152,26 +184,40 @@ class MyPanel extends JPanel {
             y1=offset;
             x2=offset+newWidth*j/nColumns;
             y2=offset+newHeight;
-            g2d.drawLine(x1,y1,x2,y2);
+            g2d.draw(new Line2D.Float(x1,y1,x2,y2));
         }
         
         //affiche l'état du tableau actuel
         for (int j=0;j<nRows;j++){
             for (int i=0;i<nColumns;i++){
+               
                 if(grid[i][j]==1){
-                    g2d.fillOval(offset+newHeight*j/nColumns+2,offset+newHeight*i/nRows+2,newWidth/nColumns-4,newHeight/nRows-4);
+                    
+                    g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(grid[i][j]==2){
+                   
+                    g.drawImage(water_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(grid[i][j]==3){
+                    
+                    g.drawImage(earth_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(grid[i][j]==4){
+                 
+                    g.drawImage(fire_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(grid[i][j]==5){
+                 
+                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
                 
             }
         }
-      
-      //faire un tableau contenant les coordonnées de chaque cases
-      //afficher le tableau relativement à la grille que l'on a créé
-      //essayer de faire bouger un objet pour s'assurer que ça fonctionne bien
  
     }
 
-    //Thread qui s'occupe de modifier la position aléatoirement la position des cercles dans le tableau aléatoirement
+    //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
     private Thread processing = new Thread(()->{
         while (true){
             //Bouge la position du cercle toutes les deux secondes
@@ -183,12 +229,12 @@ class MyPanel extends JPanel {
             if (posY==nRows){
                 posY=0;
             }
-            //Modifie aléatoirement chacun des éléments du tableau ( 1 veut dire qu'il faut afficher un cercle , 0 qu'il ne faut rien afficher)
+            //Modifie aléatoirement chacun des éléments du tableau ( 1 à 5 veut dire qu'il faut afficher une icone , 0 qu'il ne faut rien afficher)
             
             int temp=0;
             for (int i=0;i<nRows;i++){
                 for (int j=0;j<nColumns;j++){
-                    temp=rdm.nextInt(2);
+                    temp=rdm.nextInt(6);
                     
                     grid[i][j]=temp;
                 }
@@ -220,15 +266,20 @@ class MyPanel extends JPanel {
         try{
             BufferedImage bufferedImage = ImageIO.read(new File("sprites/fond_écran.png"));
             Image resultingImage = bufferedImage.getScaledInstance(widthSize, heightSize, Image.SCALE_DEFAULT);
-            BufferedImage outputImage = new BufferedImage(widthSize, heightSize, BufferedImage.TYPE_INT_RGB);
-            outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
             
-            drawSprite((Graphics2D)g, outputImage, getBounds(), 0, 0, widthSize, heightSize);     
+            
+            g.drawImage(resultingImage, 0, 0, null);     
         }
         catch (IOException ex) {
             System.err.println(ex.getMessage());
             ex.printStackTrace();
         }
+        
+        
+        
+       
+     
+        
         drawGrid(g);
     } 
 }
