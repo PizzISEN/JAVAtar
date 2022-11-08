@@ -1,7 +1,7 @@
 class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
-        int[] s= {30,30};
+        int[] s= {100,100};
         System.out.println("Constructeur");
         Carte c = new Carte(s);
         // System.out.println("Case Dispo");

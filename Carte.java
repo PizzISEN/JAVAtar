@@ -95,8 +95,16 @@ public class Carte {                        // Fonctionnelle
                
             }
             else{
-                taille_X = derniere_taille_X;
-                taille_Y = derniere_taille_Y;
+                int minCheck = Math.min(derniere_taille_X,derniere_taille_Y);
+                if(size[0] == size[1]){
+                    taille_X=minCheck;
+                    taille_Y=minCheck;
+                }
+                else{
+                    taille_X = derniere_taille_X;
+                    taille_Y = derniere_taille_Y;
+                }
+
                 break;
             }
         }
