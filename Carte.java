@@ -113,16 +113,17 @@ public class Carte {                        // Fonctionnelle
         }
 
         //Haut-Droite : (X: tailleTotal-tailleTrouvée_x -> tailleTotal_x ,Y:0->tailleTrouvée_y) 2 et Eau
-
-        for(int i=size[0] - taille_X; i<size[0]; i++){
-            for (int j = 0; j < taille_Y; j++) {
+        System.out.println(taille_X + " " + taille_Y);
+        for(int i=0; i<taille_X; i++){
+            for (int j = size[1] - taille_Y; j < size[1]; j++) {
                 carte.get(i).get(j).setType(2);
             }
         }
         
         //Bas-gauche: (X:0->taille_x,Y: tailleTotale_Y-taille_Y->tailleTotale_Y)  3 et Terre
-        for(int i=0;i<taille_X;i++){
-            for(int j=size[1]-taille_Y;j<size[1];j++){
+        System.out.println(taille_X + " " + taille_Y);
+        for(int i=size[0] - taille_X; i< size[0]; i++){
+            for(int j=0;j< taille_Y; j++){
                 carte.get(i).get(j).setType(3);
             }
         }
@@ -132,18 +133,11 @@ public class Carte {                        // Fonctionnelle
                 carte.get(i).get(j).setType(4);
             }
         }
-        for(int i=0;i<size[0];i++){
-            for(int j=0;j<size[1];j++){
-                System.out.print(carte.get(i).get(j).id+" ");
-            }
-            System.out.print("\n");
-        }
         System.out.print("\n");
         System.out.print("\n");
         for(int i=0;i<size[0];i++){
             for(int j=0;j<size[1];j++){
                 System.out.print(carte.get(i).get(j).getType()+" ");
-                System.out.print("(" +carte.get(i).get(j).id+", "+ j +") ");
             }
             System.out.print("\n");
         }
