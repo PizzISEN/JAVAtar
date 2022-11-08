@@ -10,7 +10,7 @@ public class Carte {                        // Fonctionnelle
         for (int i = 0; i < s[0]; i++) {
             carte.add(new ArrayList<Case>());
             for (int y = 0; y < s[1]; y++) {
-                carte.get(i).add(0,new Case(0, i, y));
+                carte.get(i).add(0,new Case(0, i, y, i));
             }
         }
 
@@ -21,10 +21,10 @@ public class Carte {                        // Fonctionnelle
         //   Si l'Aire cumulée des rectangles est supérieure au seuil alors garder la largeur / longueur précédente ou si on a atteint la longueur et la largeur max que chacune des aires peut prendre
         //3: Une fois que les tailles sont définies il suffit de placer les zones ( Haut-gauche: (X:0->taille_x, Y:0->taille_y),Haut-Droite : (X: tailleMax_x-taille_x->tailleMax,Y:0->taille_y),
         //   Bas-gauche: (X:0->taille_x,Y: tailleMax_Y-taille_Y->taille_Y), Bas-Droite: (X: tailleMax_x-taille_x->tailleMax_X,Y: tailleMax_Y-taille_Y->taille_Y))
-        // carte.get(0).get(0).setType(1);       //Air HG
+        // carte.get(0).get(0).setType(1);              //Air HG
         // carte.get(s[0]-1).get(0).setType(2);          //Eau HD
         // carte.get(0).get(s[1]-1).setType(3);          //Terre BG
-        // carte.get(s[0]-1).get(s[1]-1).setType(4);             //Feu BD
+        // carte.get(s[0]-1).get(s[1]-1).setType(4);     //Feu BD
         
         //définition nombres de cases pour le seuil
         double seuil =0.4;
@@ -134,7 +134,16 @@ public class Carte {                        // Fonctionnelle
         }
         for(int i=0;i<size[0];i++){
             for(int j=0;j<size[1];j++){
+                System.out.print(carte.get(i).get(j).id+" ");
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+        System.out.print("\n");
+        for(int i=0;i<size[0];i++){
+            for(int j=0;j<size[1];j++){
                 System.out.print(carte.get(i).get(j).getType()+" ");
+                System.out.print("(" +carte.get(i).get(j).id+", "+ j +") ");
             }
             System.out.print("\n");
         }
