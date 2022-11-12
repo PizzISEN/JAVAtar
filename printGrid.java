@@ -36,20 +36,23 @@ public class printGrid
         //Préparation de l'interface graphique et affichage
         private static void createAndShowGUI() {
             JFrame f = new JFrame("Javatar");
+            int[] s= {15,15};
+            Carte c = new Carte(s);
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
             f.setResizable(false);
-            f.add(new MyPanel());
+            f.add(new MyPanel(c));
             f.pack();
             f.setVisible(true);
         }
     }
 
 class MyPanel extends JPanel {
+    private Carte c;
     private volatile int posX=0,posY=0;
     private int widthSize=800,heightSize=800;
     private int offset=80;
-    private int nRows=10,nColumns=10;
+    private int nRows=0,nColumns=0;
     private int fps=60;
     private int lineThickness=5;
     private int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont les nouvelles largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
@@ -66,17 +69,20 @@ class MyPanel extends JPanel {
     private Image stone_resultingImage=null;
 
     
-    public MyPanel() {
+    public MyPanel(Carte carte) {
 
         //Configuration et création de la fenêtre dans l'interface graphique 
+        this.c=carte;
+        nRows=c.size[0];
+        nColumns=c.size[1];
         setBorder(BorderFactory.createLineBorder(Color.black));
         personnalSetup();
-        setupGrid();
+        //setupGrid();
 
         //Démarrage de la boucle d'affichage 
         gameLoop.start();
         //Démarrage de la boucle de logique de la simulation
-        processing.start();
+        //processing.start();
 
         
     }
@@ -172,7 +178,6 @@ class MyPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON); 
 
-        
         //Affichage de la grille
         g2d.setStroke(new BasicStroke(lineThickness));
         for (int i =0;i<=nRows;i++){
@@ -194,27 +199,29 @@ class MyPanel extends JPanel {
         //affiche l'état du tableau actuel
         for (int j=0;j<nRows;j++){
             for (int i=0;i<nColumns;i++){
-               
-                if(grid[i][j]==1){
+               //Modifier les images avec une couleur translucide
+                if(c.carte.get(j).get(i).getType()=="A"){
                     
                     g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(grid[i][j]==2){
+                if(c.carte.get(j).get(i).getType()=="E"){
                    
                     g.drawImage(water_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(grid[i][j]==3){
+                if(c.carte.get(j).get(i).getType()=="T"){
                     
                     g.drawImage(earth_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(grid[i][j]==4){
+                if(c.carte.get(j).get(i).getType()=="F"){
                  
                     g.drawImage(fire_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(grid[i][j]==5){
+                if(c.carte.get(j).get(i).getType()=="O"){
                  
                     g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
+                
+                //Afficher une image lié au type du personnage sur la cage
                 
             }
         }
