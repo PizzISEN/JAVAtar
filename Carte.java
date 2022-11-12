@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.lang.Math;
-public class Carte {                        // Fonctionnelle
+public class Carte {
     public int[] size;
     public ArrayList<ArrayList<Case>>carte;
 
@@ -10,21 +10,15 @@ public class Carte {                        // Fonctionnelle
         for (int i = 0; i < s[0]; i++) {
             carte.add(new ArrayList<Case>());
             for (int y = 0; y < s[1]; y++) {
-                carte.get(i).add(0,new Case(0, i, y, i));
+                carte.get(i).add(0,new Case("0", i, y, i));
             }
         }
-
-        // CALCUL DU NOMBRE DE CASE MAX DES SZ AFIN DE FAIRE UN CARRE OU RECTANGLE
 
         //1: Définir longueur largeur max de chacunes des aires (si impair laisser au moins 1 case/ si pair laisser 2 cases libres) (paire: (size -2)/2 , impair: (size-1)/2)
         //2: Incrémenter graduellement la largeur et la longueur des carrés puis regarder si l'aire de l'ensemble des rectangles dépasse le seuil fixé 
         //   Si l'Aire cumulée des rectangles est supérieure au seuil alors garder la largeur / longueur précédente ou si on a atteint la longueur et la largeur max que chacune des aires peut prendre
         //3: Une fois que les tailles sont définies il suffit de placer les zones ( Haut-gauche: (X:0->taille_x, Y:0->taille_y),Haut-Droite : (X: tailleMax_x-taille_x->tailleMax,Y:0->taille_y),
         //   Bas-gauche: (X:0->taille_x,Y: tailleMax_Y-taille_Y->taille_Y), Bas-Droite: (X: tailleMax_x-taille_x->tailleMax_X,Y: tailleMax_Y-taille_Y->taille_Y))
-        // carte.get(0).get(0).setType(1);              //Air HG
-        // carte.get(s[0]-1).get(0).setType(2);          //Eau HD
-        // carte.get(0).get(s[1]-1).setType(3);          //Terre BG
-        // carte.get(s[0]-1).get(s[1]-1).setType(4);     //Feu BD
         
         //définition nombres de cases pour le seuil
         double seuil =0.4;
@@ -45,8 +39,6 @@ public class Carte {                        // Fonctionnelle
         else{
             taille_SZ_Y_Max=(size[1]-1)/2;
         }
-
-        //Faire l'algorithme en prenant en compte le seuil et les tailles maxs
         
         Boolean tailleXEstMax= false;
         Boolean tailleYEstMax= false;
@@ -57,9 +49,6 @@ public class Carte {                        // Fonctionnelle
 
         String prochainAIncrementer="X";
         while(!(tailleXEstMax && tailleYEstMax)){
-            // System.out.println(taille_X + " " + taille_Y);
-            // System.out.println(taille_SZ_X_Max + " " + taille_SZ_Y_Max);
-            // System.out.println(tailleXEstMax + " " + tailleYEstMax);
 
             if(seuil_SZ>=taille_X*taille_Y*4){
                 derniere_taille_X=taille_X;
@@ -116,7 +105,7 @@ public class Carte {                        // Fonctionnelle
         //Haut-gauche: (X:0->tailleTrouvée_x, Y:0->tailleTrouvée_y) 1 et Air
         for(int i=0; i < taille_X; i++){
             for (int j = 0; j < taille_Y; j++) {
-                carte.get(i).get(j).setType(1);
+                carte.get(i).get(j).setType("A");
             }
         }
 
@@ -124,7 +113,7 @@ public class Carte {                        // Fonctionnelle
         System.out.println(taille_X + " " + taille_Y);
         for(int i=0; i<taille_X; i++){
             for (int j = size[1] - taille_Y; j < size[1]; j++) {
-                carte.get(i).get(j).setType(2);
+                carte.get(i).get(j).setType("E");
             }
         }
         
@@ -132,13 +121,13 @@ public class Carte {                        // Fonctionnelle
         System.out.println(taille_X + " " + taille_Y);
         for(int i=size[0] - taille_X; i< size[0]; i++){
             for(int j=0;j< taille_Y; j++){
-                carte.get(i).get(j).setType(3);
+                carte.get(i).get(j).setType("T");
             }
         }
         //Bas-Droite: (X: tailleTotale_x-taille_x->tailleTotale_X,Y: tailleTotale_Y-taille_Y->tailleTotale_Y))  4 et feu
         for(int i=size[0]-taille_X;i<size[0];i++){
             for(int j=size[1]-taille_Y;j<size[1];j++){
-                carte.get(i).get(j).setType(4);
+                carte.get(i).get(j).setType("F");
             }
         }
         System.out.print("\n");
@@ -154,28 +143,28 @@ public class Carte {                        // Fonctionnelle
     public ArrayList<Coord> caseDispo(int x, int y){        //Fonctionnelle
         Coord coord=new Coord(x,y);                         //Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
-        if(coord.x<size[0] && carte.get(coord.x+1).get(coord.y).type==0){
+        if(coord.x<size[0] && carte.get(coord.x+1).get(coord.y).type=="0"){
             caseDispos.add(new Coord(coord.x+1,coord.y));
         }
-        if(coord.x<size[0] && coord.y<size[1] && carte.get(coord.x+1).get(coord.y+1).type==0){
+        if(coord.x<size[0] && coord.y<size[1] && carte.get(coord.x+1).get(coord.y+1).type=="0"){
             caseDispos.add(new Coord(coord.x+1,coord.y+1));
         }
-        if(coord.x>0 && carte.get(coord.x-1).get(coord.y).type==0){
+        if(coord.x>0 && carte.get(coord.x-1).get(coord.y).type=="0"){
             caseDispos.add(new Coord(coord.x-1,coord.y));
         }
-        if(coord.x>0 &&  coord.y<size[1] && carte.get(coord.x-1).get(coord.y+1).type==0){
+        if(coord.x>0 &&  coord.y<size[1] && carte.get(coord.x-1).get(coord.y+1).type=="0"){
             caseDispos.add(new Coord(coord.x-1,coord.y+1));
         }
-        if(coord.y<size[1] && carte.get(coord.x).get(coord.y+1).type==0){
+        if(coord.y<size[1] && carte.get(coord.x).get(coord.y+1).type=="0"){
             caseDispos.add(new Coord(coord.x,coord.y+1));
         }
-        if(coord.y>0 && coord.y<size[0] && carte.get(coord.x+1).get(coord.y-1).type==0){
+        if(coord.y>0 && coord.y<size[0] && carte.get(coord.x+1).get(coord.y-1).type=="0"){
             caseDispos.add(new Coord(coord.x+1,coord.y-1));
         }
-        if(coord.y>0 && carte.get(coord.x).get(coord.y-1).type==0){
+        if(coord.y>0 && carte.get(coord.x).get(coord.y-1).type=="0"){
             caseDispos.add(new Coord(coord.x,coord.y-1));
         }
-        if(coord.y>0 && coord.x>0 && carte.get(coord.x-1).get(coord.y-1).type==0){
+        if(coord.y>0 && coord.x>0 && carte.get(coord.x-1).get(coord.y-1).type=="0"){
             caseDispos.add(new Coord(coord.x-1,coord.y-1));
         }
         return caseDispos;
