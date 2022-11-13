@@ -80,9 +80,9 @@ class MyPanel extends JPanel {
         //setupGrid();
 
         //Démarrage de la boucle d'affichage 
-        gameLoop.start();
+        processing.start();
         //Démarrage de la boucle de logique de la simulation
-        //processing.start();
+        //gameLoop.start();
 
         
     }
@@ -200,6 +200,35 @@ class MyPanel extends JPanel {
         for (int j=0;j<nRows;j++){
             for (int i=0;i<nColumns;i++){
                //Modifier les images avec une couleur translucide
+                int alpha = 65; // 50% transparent
+                Color myColour ;
+                
+                if(c.carte.get(j).get(i).getType()=="A"){
+                    myColour= new Color(235, 235, 235, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                    
+                }
+                if(c.carte.get(j).get(i).getType()=="E"){
+                    myColour= new Color(0, 137, 235, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                   
+                }
+                if(c.carte.get(j).get(i).getType()=="T"){
+                    myColour= new Color(102, 204, 0, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                   
+                }
+                if(c.carte.get(j).get(i).getType()=="F"){
+                    myColour= new Color(255, 100, 100, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                  
+                }
+                
+                //Afficher une image lié au type du personnage sur la cage
                 if(c.carte.get(j).get(i).getType()=="A"){
                     
                     g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
@@ -220,16 +249,13 @@ class MyPanel extends JPanel {
                  
                     g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                
-                //Afficher une image lié au type du personnage sur la cage
-                
             }
         }
  
     }
 
     //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
-    private Thread processing = new Thread(()->{
+    private Thread gameLoop = new Thread(()->{
         while (true){
             //Bouge la position du cercle toutes les deux secondes
             posX++;
@@ -259,7 +285,7 @@ class MyPanel extends JPanel {
     });
    
     //Thread qui s'occupe d'actualiser la fenêtre graphique 
-    private Thread gameLoop = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
+    private Thread processing = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
         while (true) {
             
             this.repaint();
