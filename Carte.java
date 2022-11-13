@@ -1,13 +1,18 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.lang.Math;
 public class Carte {
     public int[] size;
     public ArrayList<ArrayList<Case>>carte;
+    public ArrayList<Humain> tabPerso;
 
     Carte(int[] s){
         this.size = s;
-        carte = new ArrayList<ArrayList<Case>>();
-        for (int i = 0; i < s[0]; i++) {
+        carte = new ArrayList<ArrayList<Case>>();   //tableau double entrée permettant la création de la carte de jeu
+        tabPerso = new ArrayList<Humain>();     //Liste de Personnage permettant le choix de l'unité à jouer ensuite, rassemble l'ensemble des personnages en jeu
+
+
+        for (int i = 0; i < s[0]; i++) {        //Création du tableau de case
             carte.add(new ArrayList<Case>());
             for (int y = 0; y < s[1]; y++) {
                 carte.get(i).add(0, new Case("0", i, y, i));

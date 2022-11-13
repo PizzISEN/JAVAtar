@@ -2,6 +2,7 @@ public class Case {
     public String type;
     private Coord coord = new Coord();
     public int id;
+    public Humain personnage;   // Va servir de référence pour le personnage situé sur la case
 
     //Type des cases: 0 - air(A) - eau(E) - terre(T) - feu(F) - obstacle(O) - Personnage (P)
 
@@ -9,6 +10,7 @@ public class Case {
         this.coord.setCoord(x, y);
         this.type = t;
         this.id = id;
+        this.personnage = null;
     }
     
     public Coord getCoord(){
@@ -21,5 +23,9 @@ public class Case {
 
     public void setType(String t){
         this.type = t;
+    }
+
+    public void setPersonnage(Humain p){
+        this.personnage = p;
     }
 }

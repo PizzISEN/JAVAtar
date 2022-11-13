@@ -19,11 +19,6 @@ public abstract class Humain {
         return this.pos;
     }
 
-    // TODO Décider si on garde setPos() ou seulement this.pos.setCoord()
-    public void setPos(int x, int y) {
-        this.pos.setCoord(x, y);
-    }
-
     public void ajouterMessage(String m) {
         this.messages.add(m);
     }
@@ -93,7 +88,7 @@ public abstract class Humain {
             }
         }
         
-        this.setPos(x, y);
+        this.pos.setCoord(x, y);
     }
 
     public abstract String getEquipe();
