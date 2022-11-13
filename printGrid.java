@@ -83,6 +83,7 @@ class MyPanel extends JPanel {
         processing.start();
         //Démarrage de la boucle de logique de la simulation
         //gameLoop.start();
+         c.matrice(new Coord(5,5),new Coord(8,9));
 
         
     }
