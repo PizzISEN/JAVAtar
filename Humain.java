@@ -4,13 +4,10 @@ import java.security.SecureRandom;
 public abstract class Humain {
     private Coord pos = new Coord();
     private ArrayList<String> messages = new ArrayList<String>();
-    private Coord futurePos = new Coord();
     private boolean vivant;
 
     public Humain(int x, int y) {
-        this.pos.x = x;
-        this.pos.y = y;
-        this.futurePos = this.pos;
+        this.pos.setCoord(x, y);
         this.vivant = true;
     }
 
@@ -22,18 +19,9 @@ public abstract class Humain {
         return this.pos;
     }
 
-    public Coord getFuturePos() {
-        return this.futurePos;
-    }
-
+    // TODO Décider si on garde setPos() ou seulement this.pos.setCoord()
     public void setPos(int x, int y) {
-        this.pos.x = x;
-        this.pos.y = y;
-    }
-
-    public void setFuturePos(int x, int y) {
-        this.pos.x = x;
-        this.pos.y = y;
+        this.pos.setCoord(x, y);
     }
 
     public void ajouterMessage(String m) {
@@ -70,28 +58,42 @@ public abstract class Humain {
         return rand.nextInt(6);
     }
 
-    // TODO: Gérer les rencontres et voir si on calcul la futurePos avant ou après s'être déplacé
+    // TODO: Ajouter la gestion d'obstacles
     public void seDeplacer(int h, int w) {
         Coord centre = new Coord(h/2, w/2);
-        int direction = lancerDeDes();
+        int direction;
+        Boolean newPosFound = false;
 
-        if(direction == 0 && this.pos.x <= centre.x) {
-            this.futurePos.x -= 1;
-        } else if (direction == 0 && this.pos.x > centre.x) {
-            this.futurePos.x += 1;
-        } else if (direction == 1 && this.pos.y <= centre.y) {
-            this.futurePos.y -= 1;
-        } else if (direction == 1 && this.pos.y > centre.y) {
-            this.futurePos.y += 1;
-        } else if ((direction == 2 || direction == 3) && this.pos.x <= centre.x) {
-            this.futurePos.x += 1;
-        } else if ((direction == 2 || direction == 3) && this.pos.x > centre.x) {
-            this.futurePos.x -= 1;
-        } else if ((direction == 4 || direction == 5) && this.pos.y <= centre.y) {
-            this.futurePos.y += 1;
-        } else if ((direction == 4 || direction == 5) && this.pos.y > centre.y) {
-            this.futurePos.y -= 1;
+        int x = this.pos.getX();
+        int y = this.pos.getY();
+
+        while (!newPosFound) {
+            direction = lancerDeDes();
+
+            if ((direction == 0 && x <= centre.getX()) || ((direction == 2 || direction == 3) && x > centre.getX())) {
+                if (this.pos.getX() > 0) {
+                    x -= 1;
+                    newPosFound = true;
+                }
+            } else if ((direction == 0 && x > centre.getX()) || ((direction == 2 || direction == 3) && x <= centre.getX())) {
+                if (this.pos.getX() < h-1) {
+                    x += 1;
+                    newPosFound = true;
+                }
+            } else if ((direction == 1 && y <= centre.getY()) || ((direction == 4 || direction == 5) && y > centre.getY())) {
+                if (this.pos.getY() > 0 ) {
+                    y -= 1;
+                    newPosFound = true;
+                }
+            } else if ((direction == 1 && y > centre.getY()) || ((direction == 4 || direction == 5) && y <= centre.getY())) {
+                if (this.pos.getY() < w-1) {
+                    y += 1;
+                    newPosFound = true;
+                }
+            }
         }
+        
+        this.setPos(x, y);
     }
 
     public abstract String getEquipe();
