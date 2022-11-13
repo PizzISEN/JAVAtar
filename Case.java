@@ -3,8 +3,7 @@ public class Case {
     private Coord coord = new Coord();
 
     public Case (int t, int x, int y){
-        this.coord.x = x;
-        this.coord.y = y;
+        this.coord.setCoord(x, y);;
         this.type = t;
     }
     

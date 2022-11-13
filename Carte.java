@@ -23,29 +23,29 @@ public class Carte {                        // Fonctionnelle
     public ArrayList<Coord> caseDispo(int x, int y){        //Fonctionnelle
         Coord coord=new Coord(x,y);                         //Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
-        if(coord.x<size[0] && carte.get(coord.x+1).get(coord.y).type==0){
-            caseDispos.add(new Coord(coord.x+1,coord.y));
+        if(coord.getX()<size[0] && carte.get(coord.getX()+1).get(coord.getY()).type==0){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()));
         }
-        if(coord.x<size[0] && coord.y<size[1] && carte.get(coord.x+1).get(coord.y+1).type==0){
-            caseDispos.add(new Coord(coord.x+1,coord.y+1));
+        if(coord.getX()<size[0] && coord.getY()<size[1] && carte.get(coord.getX()+1).get(coord.getY()+1).type==0){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1));
         }
-        if(coord.x>0 && carte.get(coord.x-1).get(coord.y).type==0){
-            caseDispos.add(new Coord(coord.x-1,coord.y));
+        if(coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()).type==0){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()));
         }
-        if(coord.x>0 &&  coord.y<size[1] && carte.get(coord.x-1).get(coord.y+1).type==0){
-            caseDispos.add(new Coord(coord.x-1,coord.y+1));
+        if(coord.getX()>0 &&  coord.getY()<size[1] && carte.get(coord.getX()-1).get(coord.getY()+1).type==0){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1));
         }
-        if(coord.y<size[1] && carte.get(coord.x).get(coord.y+1).type==0){
-            caseDispos.add(new Coord(coord.x,coord.y+1));
+        if(coord.getY()<size[1] && carte.get(coord.getX()).get(coord.getY()+1).type==0){
+            caseDispos.add(new Coord(coord.getX(),coord.getY()+1));
         }
-        if(coord.y>0 && coord.y<size[0] && carte.get(coord.x+1).get(coord.y-1).type==0){
-            caseDispos.add(new Coord(coord.x+1,coord.y-1));
+        if(coord.getY()>0 && coord.getY()<size[0] && carte.get(coord.getX()+1).get(coord.getY()-1).type==0){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1));
         }
-        if(coord.y>0 && carte.get(coord.x).get(coord.y-1).type==0){
-            caseDispos.add(new Coord(coord.x,coord.y-1));
+        if(coord.getY()>0 && carte.get(coord.getX()).get(coord.getY()-1).type==0){
+            caseDispos.add(new Coord(coord.getX(),coord.getY()-1));
         }
-        if(coord.y>0 && coord.x>0 && carte.get(coord.x-1).get(coord.y-1).type==0){
-            caseDispos.add(new Coord(coord.x-1,coord.y-1));
+        if(coord.getY()>0 && coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()-1).type==0){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()-1));
         }
         return caseDispos;
     }
