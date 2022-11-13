@@ -6,8 +6,7 @@ public class Case {
     //Type des cases: 0 - air(A) - eau(E) - terre(T) - feu(F) - obstacle(O) - Personnage (P)
 
     public Case (String t, int x, int y, int id){
-        this.coord.x = x;
-        this.coord.y = y;
+        this.coord.setCoord(x, y);
         this.type = t;
         this.id = id;
     }
