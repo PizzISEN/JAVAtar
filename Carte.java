@@ -185,14 +185,6 @@ public class Carte {
         return caseDispos;
     }
 
-
-
-    public ArrayList<Coord> aStarSearch(Coord start,Coord goal){
- 
-        
-        return null;
-    }
-    
     class Node implements Comparator<Node> {
     
         // Member variables of this class
@@ -297,7 +289,7 @@ public class Carte {
         }
     }
  
-    public void matrice(Coord depart,Coord dest)
+    public Coord matrice(Coord depart,Coord dest)
     {
         List<List<Node> > adj = new ArrayList<List<Node> >();
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();    
@@ -336,12 +328,21 @@ public class Carte {
         }
         this.V = itNode;
         this.dist = new int[V];
+        int distCompare = -1;
+        Coord sortie = new Coord();
         this.settled = new HashSet<Integer>();
         this.pq = new PriorityQueue<Node>(V, new Node());
-         dijkstra(adj, dep);
+        caseDispos=caseDispo(depart.getX(), depart.getY());
+        for (int j = 0; j < caseDispos.size(); j++) {
+            dijkstra(adj,caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]));
+            if(distCompare<0 || dist[des]<distCompare ){
+                distCompare=dist[des];
+                sortie=new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
+            }
+        }
 
-        System.out.println(dep + " to " + des + " is "+ dist[des]);
-        return;
+        System.out.println(dep + " to " + des + " is "+ distCompare);
+        return sortie;
 
     }
 }
