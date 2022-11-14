@@ -1,6 +1,6 @@
 public class Coord {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Coord() {
         this.x = 0;
@@ -10,5 +10,18 @@ public class Coord {
     public Coord(int x,int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setCoord(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 }

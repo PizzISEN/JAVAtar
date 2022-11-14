@@ -1,6 +1,7 @@
 class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
+<<<<<<< HEAD
          int[] s= {4,4};
         // System.out.println("Constructeur");
          Carte c = new Carte(s);
@@ -16,6 +17,11 @@ class HelloWorld {
         //     System.out.println( "N" + index+ " : " + c.caseDispo(2,2).get(index).x + c.caseDispo(2,2).get(index).y);
         // }
         c.matrice(new Coord(1,1),new Coord(3,2));
+=======
+        int[] s= {30,30};
+        System.out.println("Constructeur");
+        Carte c = new Carte(s);
+>>>>>>> e911f7fcff84d4334e5418d7d56ed7b5207b4813
         
     }
 }
