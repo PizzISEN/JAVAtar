@@ -1,5 +1,5 @@
 import java.util.*;
-public class Javatar_eau {
+public class Javatar_eau extends Tribus_de_l_eau{
     private static Javatar_eau INSTANCE;
 
     private List<String> messages;

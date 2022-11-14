@@ -1,5 +1,5 @@
 import java.util.*;
-public class Javatar_air {
+public class Javatar_air extends Nomades_de_l_air {
     private static Javatar_air INSTANCE;
 
     private List<String> messages;

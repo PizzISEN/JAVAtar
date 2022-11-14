@@ -1,5 +1,5 @@
 import java.util.*;
-public class Javatar_feu {
+public class Javatar_feu extends Nation_du_feu{
     private static Javatar_feu INSTANCE;
 
     private List<String> messages;

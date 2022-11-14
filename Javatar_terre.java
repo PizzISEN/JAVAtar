@@ -1,5 +1,5 @@
 import java.util.*;
-public class Javatar_terre {
+public class Javatar_terre extends Royaume_de_la_terre {
     private static Javatar_terre INSTANCE;
 
     private List<String> messages;
