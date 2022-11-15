@@ -293,50 +293,62 @@ class MyPanel extends JPanel {
                     g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
                   
                 }
+                if(c.carte.get(j).get(i).getType()=="O"){
+                     
+                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
                 
                 //Afficher une image lié au type du personnage sur la cage
-                if(c.carte.get(j).get(i).getType()=="A"){
-                    
-                    g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
-                }
-                if(c.carte.get(j).get(i).getType()=="E"){
+                if(c.carte.get(j).get(i).personnage!=null){
+                    if(c.carte.get(j).get(i).personnage.getEquipe()=="A"){
+                        myColour= new Color(235, 235, 235, alpha);
+                        g.setColor(myColour);
+                        g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                        g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                        
+                    }
+                    if(c.carte.get(j).get(i).personnage.getEquipe()=="E"){
+                       
+                        g.drawImage(water_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                    }
+                    if(c.carte.get(j).get(i).personnage.getEquipe()=="T"){
+                        
+                        g.drawImage(earth_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                    }
+                    if(c.carte.get(j).get(i).personnage.getEquipe()=="F"){
+                     
+                        g.drawImage(fire_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                    }
                    
-                    g.drawImage(water_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(c.carte.get(j).get(i).getType()=="T"){
-                    
-                    g.drawImage(earth_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
-                }
-                if(c.carte.get(j).get(i).getType()=="F"){
-                 
-                    g.drawImage(fire_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
-                }
-                if(c.carte.get(j).get(i).getType()=="O"){
-                 
-                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
-                }
-                /*
-                if(c.carte.get(j).get(i).getType()=="A"){
-                    
+                
+               
+                if(c.carte.get(j).get(i).getType()=="Ja"){
+                    myColour= new Color(235, 235, 235, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
                     g.drawImage(air_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(c.carte.get(j).get(i).getType()=="E"){
-                   
+                if(c.carte.get(j).get(i).getType()=="Je"){
+                    myColour= new Color(0, 137, 235, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
                     g.drawImage(water_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(c.carte.get(j).get(i).getType()=="T"){
-                    
+                if(c.carte.get(j).get(i).getType()=="Jt"){
+                    myColour= new Color(102, 204, 0, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
                     g.drawImage(earth_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(c.carte.get(j).get(i).getType()=="F"){
-                 
+                if(c.carte.get(j).get(i).getType()=="Jf"){
+                    myColour= new Color(255, 100, 100, alpha);
+                    g.setColor(myColour);
+                    g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
                     g.drawImage(fire_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
-                if(c.carte.get(j).get(i).getType()=="O"){
+                
                  
-                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
-                }
-                 */
             }
         }
  

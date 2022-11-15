@@ -191,7 +191,7 @@ public class Carte {
                         do {
                             feuX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
                             feuY = new SecureRandom().nextInt(size[1] - (size[1]-tY)) + (size[1]-tY);
-                        } while (carte.get(feuX).get(feuY).personnage != null);
+                        } while (carte.get(feuX).get(feuY).personnage != null || carte.get(feuX).get(feuY).type == "Jf");
                         tab.get(i).pos.setCoord(feuX,feuY);
                         carte.get(feuX).get(feuY).personnage = tabPerso.get(i);
 
@@ -203,7 +203,7 @@ public class Carte {
                         do {
                             airX = new SecureRandom().nextInt(tX);
                             airY = new SecureRandom().nextInt(tY);
-                        } while (carte.get(airX).get(airY).personnage != null);
+                        } while (carte.get(airX).get(airY).personnage != null || carte.get(airX).get(airY).type == "Ja");
                         tab.get(i).pos.setCoord(airX,airY);
                         carte.get(airX).get(airY).personnage = tabPerso.get(i);
                         
@@ -215,7 +215,7 @@ public class Carte {
                         do {
                             terreX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
                             terreY = new SecureRandom().nextInt(tY);
-                        } while (carte.get(terreX).get(terreY).personnage != null);
+                        } while (carte.get(terreX).get(terreY).personnage != null || carte.get(terreX).get(terreY).type == "Jt");
                         tab.get(i).pos.setCoord(terreX, terreY);
                         carte.get(terreX).get(terreY).personnage = tabPerso.get(i);
                         
@@ -227,7 +227,7 @@ public class Carte {
                         do {
                             eauX = new SecureRandom().nextInt(tX);
                             eauY = new SecureRandom().nextInt(size[0] - (size[0]-tY)) + (size[0]-tY);
-                        } while (carte.get(eauX).get(eauY).personnage != null);
+                        } while (carte.get(eauX).get(eauY).personnage != null || carte.get(eauX).get(eauY).type == "Je");
                         tab.get(i).pos.setCoord(eauX, eauY);
                         carte.get(eauX).get(eauY).personnage = tabPerso.get(i);
                         break;
