@@ -36,12 +36,15 @@ public class printGrid
         //Préparation de l'interface graphique et affichage
         private static void createAndShowGUI() {
             JFrame f = new JFrame("Javatar");
-            int[] s = {10,10};
-            Carte c = new Carte(s);
+            
+            // c.map[0][0] = Javatar_air.getInstance();
+            // c.map[0][0] = Javatar_eau.getInstance();
+            // c.map[0][0] = Javatar_feu.getInstance();
+            // c.map[0][0] = Javatar_terre.getInstance();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
             f.setResizable(false);
-            f.add(new MyPanel(c));
+            f.add(new MyPanel());
             f.pack();
             f.setVisible(true);
         }
@@ -66,30 +69,40 @@ class MyPanel extends JPanel {
     private Image water_tribe_resultingImage=null;
     private Image air_tribe_resultingImage=null;
     private Image earth_tribe_resultingImage=null;
+    private Image fire_master_resultingImage=null;
+    private Image water_master_resultingImage=null;
+    private Image air_master_resultingImage=null;
+    private Image earth_master_resultingImage=null;
     private Image stone_resultingImage=null;
 
     
-    public MyPanel(Carte carte) {
+    public MyPanel() {
 
         //Configuration et création de la fenêtre dans l'interface graphique 
-        this.c=carte;
-        nRows=c.size[0];
-        nColumns=c.size[1];
+        
+        int[] s =  personnalSetup();
+        c = new Carte(s);
+        Javatar_air.getInstance().setPos(0, 0);
+        Javatar_eau.getInstance().setPos(0, s[1]-1);
+        Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
+        Javatar_terre.getInstance().setPos(s[0]-1, 0);
+        
         setBorder(BorderFactory.createLineBorder(Color.black));
-        personnalSetup();
+       
         //setupGrid();
 
         //Démarrage de la boucle d'affichage 
         processing.start();
         //Démarrage de la boucle de logique de la simulation
         //gameLoop.start();
-         //c.matrice(new Coord(5,5),new Coord(8,9));
+        //c.matrice(new Coord(5,5),new Coord(8,9));
 
         
     }
 
     //Fonction qui permet de configurer la simulation si l'utilisateur le veut . Sinon on prend les paramètres par défauts
-    private void personnalSetup(){
+    private int[] personnalSetup(){
+        int[] size={10,10};
         System.out.println("Voulez-vous configurer la fenêtre de la simulation? (Y)es/(N)o");
         String tmp=System.console().readLine();
         while(!tmp.equals("Yes")&&!tmp.equals("No")&&!tmp.equals("Y")&&!tmp.equals("N")&&!tmp.equals(""))
@@ -100,18 +113,38 @@ class MyPanel extends JPanel {
         }
         if (tmp.equals("Yes")||tmp.equals("Y")){
             System.out.println("Nombre de lignes?");
-            nRows=Integer.parseInt(System.console().readLine());
+            String res=System.console().readLine();
+            
+            if(res.length()!=0){
+                size[0]=Integer.parseInt(res);
+            }
+            
             System.out.println("Nombre de Colonnes?");
-            nColumns=Integer.parseInt(System.console().readLine());
-            grid=new int[nRows][nColumns];
-
+            res=System.console().readLine();
+            if(res.length()!=0){
+                size[1]=Integer.parseInt(res);
+            }
+            
             System.out.println("Longueur de la fenêtre (en px)?");
-            widthSize=Integer.parseInt(System.console().readLine());
+            res=System.console().readLine();
+            System.out.println(res);
+            if(res.length()!=0){
+                widthSize=Integer.parseInt(res);
+            }
             System.out.println("Hauteur de la fenêtre (en px)?");
-            heightSize=Integer.parseInt(System.console().readLine());
+            res=System.console().readLine();
+            if(res.length()!=0){
+                heightSize=Integer.parseInt(res);
+            }
             System.out.println("offset (en px)?");
-            offset=Integer.parseInt(System.console().readLine());
+            res=System.console().readLine();
+            if(res.length()!=0){
+                offset=Integer.parseInt(res);
+            }
+            
         }
+        nRows=size[0];
+        nColumns=size[1];
         //Une fois que le jeu a été configuré , on peut charger les images relativement à la taille réelle de la fenêtre
         try {
             image=ImageIO.read(new File("sprites/fire_tribe.png"));
@@ -146,6 +179,38 @@ class MyPanel extends JPanel {
             e.printStackTrace();
         }
         try {
+            image=ImageIO.read(new File("sprites/fire_master.png"));
+            fire_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/earth_master.png"));
+            earth_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/water_master.png"));
+            water_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/air_master.png"));
+            air_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
             image=ImageIO.read(new File("sprites/stone.png"));
             stone_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
@@ -153,7 +218,7 @@ class MyPanel extends JPanel {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        return(size);
     };
     //Initialise toutes les valeurs de grid à 0 
     private void setupGrid(){
@@ -190,7 +255,7 @@ class MyPanel extends JPanel {
             
         }
         for(int j=0;j<=nColumns;j++){
-            x1=offset +newHeight*j/nRows;
+            x1=offset +newWidth*j/nColumns;
             y1=offset;
             x2=offset+newWidth*j/nColumns;
             y2=offset+newHeight;
@@ -250,6 +315,28 @@ class MyPanel extends JPanel {
                  
                     g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
+                /*
+                if(c.carte.get(j).get(i).getType()=="A"){
+                    
+                    g.drawImage(air_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="E"){
+                   
+                    g.drawImage(water_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="T"){
+                    
+                    g.drawImage(earth_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="F"){
+                 
+                    g.drawImage(fire_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="O"){
+                 
+                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                 */
             }
         }
  
