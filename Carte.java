@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.lang.Math;
-
+import java.security.SecureRandom;
 import java.util.*;
 
 public class Carte {
@@ -35,6 +34,16 @@ public class Carte {
         //3: Une fois que les tailles sont définies il suffit de placer les zones ( Haut-gauche: (X:0->taille_x, Y:0->taille_y),Haut-Droite : (X: tailleMax_x-taille_x->tailleMax,Y:0->taille_y),
         //   Bas-gauche: (X:0->taille_x,Y: tailleMax_Y-taille_Y->taille_Y), Bas-Droite: (X: tailleMax_x-taille_x->tailleMax_X,Y: tailleMax_Y-taille_Y->taille_Y))
         
+        //Début de la pose des Obstacles
+        int nbCase = size[0] * size[1];
+        double nbObstacle = Math.floor(nbCase * 0.12);
+        for (int o=0; o<nbObstacle; o++){
+            int randX = new SecureRandom().nextInt(size[0]);
+            int randY = new SecureRandom().nextInt(size[1]);
+            carte.get(randX).get(randY).setType("O");
+        }
+
+
         //définition nombres de cases pour le seuil
         double seuil =0.4;
         double seuil_SZ = Math.floor((size[0] * size[1]) * seuil);

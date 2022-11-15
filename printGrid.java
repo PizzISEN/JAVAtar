@@ -36,7 +36,7 @@ public class printGrid
         //Préparation de l'interface graphique et affichage
         private static void createAndShowGUI() {
             JFrame f = new JFrame("Javatar");
-            int[] s= {15,15};
+            int[] s= {10,10};
             Carte c = new Carte(s);
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
