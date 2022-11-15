@@ -69,6 +69,10 @@ class MyPanel extends JPanel {
     private Image water_tribe_resultingImage=null;
     private Image air_tribe_resultingImage=null;
     private Image earth_tribe_resultingImage=null;
+    private Image fire_master_resultingImage=null;
+    private Image water_master_resultingImage=null;
+    private Image air_master_resultingImage=null;
+    private Image earth_master_resultingImage=null;
     private Image stone_resultingImage=null;
 
     
@@ -113,16 +117,12 @@ class MyPanel extends JPanel {
             
             if(res.length()!=0){
                 size[0]=Integer.parseInt(res);
-                nRows=size[0];
-        
-       
             }
             
             System.out.println("Nombre de Colonnes?");
             res=System.console().readLine();
             if(res.length()!=0){
                 size[1]=Integer.parseInt(res);
-                nColumns=size[1];
             }
             
             System.out.println("Longueur de la fenêtre (en px)?");
@@ -141,7 +141,10 @@ class MyPanel extends JPanel {
             if(res.length()!=0){
                 offset=Integer.parseInt(res);
             }
+            
         }
+        nRows=size[0];
+        nColumns=size[1];
         //Une fois que le jeu a été configuré , on peut charger les images relativement à la taille réelle de la fenêtre
         try {
             image=ImageIO.read(new File("sprites/fire_tribe.png"));
@@ -170,6 +173,38 @@ class MyPanel extends JPanel {
         try {
             image=ImageIO.read(new File("sprites/air_tribe.png"));
             air_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/fire_master.png"));
+            fire_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/earth_master.png"));
+            earth_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/water_master.png"));
+            water_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
+    
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            image=ImageIO.read(new File("sprites/air_master.png"));
+            air_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -280,6 +315,28 @@ class MyPanel extends JPanel {
                  
                     g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                 }
+                /*
+                if(c.carte.get(j).get(i).getType()=="A"){
+                    
+                    g.drawImage(air_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="E"){
+                   
+                    g.drawImage(water_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="T"){
+                    
+                    g.drawImage(earth_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="F"){
+                 
+                    g.drawImage(fire_master_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                if(c.carte.get(j).get(i).getType()=="O"){
+                 
+                    g.drawImage(stone_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
+                }
+                 */
             }
         }
  
