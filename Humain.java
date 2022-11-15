@@ -58,15 +58,12 @@ public abstract class Humain {
         return rand.nextInt(6);
     }
 
-    public void seDeplacer(Carte c) {
+    public Coord seDeplacer(ArrayList<Coord> casesDispo) {
         int directionX, directionY;
         Boolean newPosFound = false;
-        ArrayList<Coord> casesDispo = c.caseDispo(this.getPos());
 
         int x = this.pos.getX();
         int y = this.pos.getY();
-
-        System.out.println("\n" + c + "\n");
 
         while (!newPosFound) {
 
@@ -80,10 +77,12 @@ public abstract class Humain {
                 y += directionY;
                 System.out.println("Moved to coords: " + directionX + " " + directionY);
                 newPosFound = true;
-            }    
+            }
         }
         
         this.pos.setCoord(x, y);
+
+        return this.getPos();
     }
 
     public abstract String getEquipe();
