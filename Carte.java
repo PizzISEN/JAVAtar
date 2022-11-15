@@ -121,8 +121,6 @@ public class Carte {
                 break;
             }
         }
-        System.out.println("Seuil_SZ: " + seuil_SZ +"\n");
-        System.out.println("La taille optimale donnée par l'algo est en X : "+taille_X+" et en Y: "+taille_Y);
 
         //  Placement des zones apres avoir calculé le nombre max de cases par SZ
 
@@ -134,7 +132,6 @@ public class Carte {
         }
 
         //Haut-Droite : (X: tailleTotal-tailleTrouvée_x -> tailleTotal_x ,Y:0->tailleTrouvée_y) 2 et Eau
-        System.out.println(taille_X + " " + taille_Y);
         for(int i=0; i<taille_X; i++){
             for (int j = size[1] - taille_Y; j < size[1]; j++) {
                 carte.get(i).get(j).setType("E");
@@ -142,7 +139,6 @@ public class Carte {
         }
         
         //Bas-gauche: (X:0->taille_x,Y: tailleTotale_Y-taille_Y->tailleTotale_Y)  3 et Terre
-        System.out.println(taille_X + " " + taille_Y);
         for(int i=size[0] - taille_X; i< size[0]; i++){
             for(int j=0;j< taille_Y; j++){
                 carte.get(i).get(j).setType("T");
@@ -153,14 +149,6 @@ public class Carte {
             for(int j=size[1]-taille_Y;j<size[1];j++){
                 carte.get(i).get(j).setType("F");
             }
-        }
-        System.out.print("\n");
-        System.out.print("\n");
-        for(int i=0;i<size[0];i++){
-            for(int j=0;j<size[1];j++){
-                System.out.print(carte.get(i).get(j).getType()+" ");
-            }
-            System.out.print("\n");
         }
     }
 
@@ -348,8 +336,6 @@ public class Carte {
                 sortie=new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
             }
         }
-
-        System.out.println(dep + " to " + des + " is "+ distCompare);
         return sortie;
 
     }
