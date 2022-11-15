@@ -155,8 +155,7 @@ public class Carte {
         }
     }
 
-    public ArrayList<Coord> caseDispo(int x, int y){        //Fonctionnelle
-        Coord coord=new Coord(x,y);                         //Renvoi les coord des cases dispo
+    public ArrayList<Coord> caseDispo(Coord coord){        //Fonctionnelle - Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
         if(coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()).type=="0"){
             caseDispos.add(new Coord(coord.getX()+1,coord.getY()));
@@ -217,7 +216,7 @@ public class Carte {
     
             return 0;
         }
-        }
+    }
 
     // Method 1
     // Dijkstra's Algorithm
@@ -309,7 +308,7 @@ public class Carte {
                 }
                 if(carte.get(i).get(y).type== "0"){
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(i, y);
+                    caseDispos=caseDispo(new Coord(i, y));
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),1));
                     }
@@ -317,7 +316,7 @@ public class Carte {
                 }
                 else{
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(i, y);
+                    caseDispos=caseDispo(new Coord(i, y));
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),99));
                     }
@@ -332,7 +331,7 @@ public class Carte {
         Coord sortie = new Coord();
         this.settled = new HashSet<Integer>();
         this.pq = new PriorityQueue<Node>(V, new Node());
-        caseDispos=caseDispo(depart.getX(), depart.getY());
+        caseDispos=caseDispo(depart);
         for (int j = 0; j < caseDispos.size(); j++) {
             dijkstra(adj,caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]));
             if(distCompare<0 || dist[des]<distCompare ){
