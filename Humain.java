@@ -6,11 +6,6 @@ public abstract class Humain {
     private ArrayList<String> messages = new ArrayList<String>();
     private boolean vivant;
 
-    public Humain() {
-        this.pos.setCoord(0, 0);
-        this.vivant = true;
-    }
-
     public Humain(int x, int y) {
         this.pos.setCoord(x, y);
         this.vivant = true;

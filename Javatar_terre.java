@@ -1,16 +1,19 @@
 import java.util.*;
+
 public class Javatar_terre extends Royaume_de_la_terre {
     private static Javatar_terre INSTANCE;
 
     private List<String> messages;
-
     private int nbOfMessages;
 
-    private Javatar_terre(){};
+    private Javatar_terre(int x, int y) {
+        super(x, y);
+    };
 
     public static Javatar_terre getInstance() {
         if(INSTANCE== null){
-            INSTANCE = new Javatar_terre();
+            // BAS-GAUCHE -> x = size[0] - 1, y = 0
+            INSTANCE = new Javatar_terre(14, 14);
         }
         return INSTANCE;
     }

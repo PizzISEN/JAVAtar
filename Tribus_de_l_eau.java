@@ -1,8 +1,4 @@
 public class Tribus_de_l_eau extends Humain{
-    public Tribus_de_l_eau() {
-        super();
-    }
-    
     public Tribus_de_l_eau(int x, int y){
         super(0, 0);
     }
