@@ -10,6 +10,10 @@ public class Javatar_air extends Nomades_de_l_air {
         super(x, y);
     };
 
+    public void setPos(int x, int y) {
+        this.pos.setCoord(x, y);
+    }
+
     public static Javatar_air getInstance() {
         if(INSTANCE== null){
             // HAUT-GAUCHE -> x = 0, y = 0

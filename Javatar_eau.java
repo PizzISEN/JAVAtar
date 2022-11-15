@@ -10,6 +10,10 @@ public class Javatar_eau extends Tribus_de_l_eau{
         super(x, y);
     };
 
+    public void setPos(int x, int y) {
+        this.pos.setCoord(x, y);
+    }
+    
     public static Javatar_eau getInstance() {
         if(INSTANCE== null){
             // HAUT-DROITE -> x = 0, y = size[1] - 1

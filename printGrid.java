@@ -36,8 +36,16 @@ public class printGrid
         //Préparation de l'interface graphique et affichage
         private static void createAndShowGUI() {
             JFrame f = new JFrame("Javatar");
-            int[] s= {15,15};
+            int[] s = {15,15};
             Carte c = new Carte(s);
+            Javatar_air.getInstance().setPos(0, 0);
+            Javatar_eau.getInstance().setPos(0, s[1]-1);
+            Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
+            Javatar_terre.getInstance().setPos(s[0]-1, 0);
+            // c.map[0][0] = Javatar_air.getInstance();
+            // c.map[0][0] = Javatar_eau.getInstance();
+            // c.map[0][0] = Javatar_feu.getInstance();
+            // c.map[0][0] = Javatar_terre.getInstance();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
             f.setResizable(false);

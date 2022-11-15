@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.security.SecureRandom;
 
 public abstract class Humain {
-    private Coord pos = new Coord();
+    protected Coord pos = new Coord();
     private ArrayList<String> messages = new ArrayList<String>();
     private boolean vivant;
 

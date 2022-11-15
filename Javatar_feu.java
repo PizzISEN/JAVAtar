@@ -10,6 +10,10 @@ public class Javatar_feu extends Nation_du_feu{
         super(x, y);
     };
 
+    public void setPos(int x, int y) {
+        this.pos.setCoord(x, y);
+    }
+
     public static Javatar_feu getInstance() {
         if(INSTANCE== null){
             // BAS-DROITE -> x = size[0] - 1, y = size[1] - 1 

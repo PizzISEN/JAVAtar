@@ -10,6 +10,10 @@ public class Javatar_terre extends Royaume_de_la_terre {
         super(x, y);
     };
 
+    public void setPos(int x, int y) {
+        this.pos.setCoord(x, y);
+    }
+    
     public static Javatar_terre getInstance() {
         if(INSTANCE== null){
             // BAS-GAUCHE -> x = size[0] - 1, y = 0
