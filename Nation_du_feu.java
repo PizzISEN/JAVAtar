@@ -1,4 +1,8 @@
 public class Nation_du_feu extends Humain {
+    public Nation_du_feu() {
+        super();
+    }
+
     public Nation_du_feu(int x, int y){
         super(0, 0);
     }

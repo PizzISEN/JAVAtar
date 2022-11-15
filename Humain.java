@@ -6,6 +6,11 @@ public abstract class Humain {
     private ArrayList<String> messages = new ArrayList<String>();
     private boolean vivant;
 
+    public Humain() {
+        this.pos.setCoord(0, 0);
+        this.vivant = true;
+    }
+
     public Humain(int x, int y) {
         this.pos.setCoord(x, y);
         this.vivant = true;
@@ -55,37 +60,45 @@ public abstract class Humain {
 
     // TODO: Ajouter la gestion d'obstacles
     public void seDeplacer(int h, int w) {
+        if (h % 2 == 1) { h += 1; }
+        if (w % 2 == 1) { w += 1; }
         Coord centre = new Coord(h/2, w/2);
-        int direction;
+        int directionX, directionY;
         Boolean newPosFound = false;
 
         int x = this.pos.getX();
         int y = this.pos.getY();
 
         while (!newPosFound) {
-            direction = lancerDeDes();
 
-            if ((direction == 0 && x <= centre.getX()) || ((direction == 2 || direction == 3) && x > centre.getX())) {
-                if (this.pos.getX() > 0) {
-                    x -= 1;
-                    newPosFound = true;
-                }
-            } else if ((direction == 0 && x > centre.getX()) || ((direction == 2 || direction == 3) && x <= centre.getX())) {
-                if (this.pos.getX() < h-1) {
-                    x += 1;
-                    newPosFound = true;
-                }
-            } else if ((direction == 1 && y <= centre.getY()) || ((direction == 4 || direction == 5) && y > centre.getY())) {
-                if (this.pos.getY() > 0 ) {
-                    y -= 1;
-                    newPosFound = true;
-                }
-            } else if ((direction == 1 && y > centre.getY()) || ((direction == 4 || direction == 5) && y <= centre.getY())) {
-                if (this.pos.getY() < w-1) {
-                    y += 1;
-                    newPosFound = true;
-                }
-            }
+            directionX = new SecureRandom().nextInt(3) - 2;
+            directionY = new SecureRandom().nextInt(3) - 2;
+
+            System.out.print(directionX + " " + directionY);
+
+            newPosFound = true;
+
+            // if ((direction == 0 && x <= centre.getX()) || ((direction == 2 || direction == 3) && x > centre.getX())) {
+            //     if (this.pos.getX() > 0) {
+            //         x -= 1;
+            //         newPosFound = true;
+            //     }
+            // } else if ((direction == 0 && x > centre.getX()) || ((direction == 2 || direction == 3) && x <= centre.getX())) {
+            //     if (this.pos.getX() < h-1) {
+            //         x += 1;
+            //         newPosFound = true;
+            //     }
+            // } else if ((direction == 1 && y <= centre.getY()) || ((direction == 4 || direction == 5) && y > centre.getY())) {
+            //     if (this.pos.getY() > 0 ) {
+            //         y -= 1;
+            //         newPosFound = true;
+            //     }
+            // } else if ((direction == 1 && y > centre.getY()) || ((direction == 4 || direction == 5) && y <= centre.getY())) {
+            //     if (this.pos.getY() < w-1) {
+            //         y += 1;
+            //         newPosFound = true;
+            //     }
+            // }
         }
         
         this.pos.setCoord(x, y);
