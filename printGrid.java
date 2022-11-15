@@ -220,7 +220,7 @@ class MyPanel extends JPanel {
             
         }
         for(int j=0;j<=nColumns;j++){
-            x1=offset +newHeight*j/nRows;
+            x1=offset +newWidth*j/nColumns;
             y1=offset;
             x2=offset+newWidth*j/nColumns;
             y2=offset+newHeight;
