@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 import java.lang.Math;
 import java.security.SecureRandom;
 import java.util.*;
+import org.json.*; 
 
 public class Carte {
     public int[] size;
+    public int[] sentenceUse;
     public ArrayList<ArrayList<Case>>carte;
     public ArrayList<Humain> tabPerso;
 
@@ -180,7 +183,15 @@ public class Carte {
         placementPersos(tabPerso, taille_X, taille_Y);
 
     }
-
+    public String DonnePhrase(){
+        String msg="";
+        int i = new SecureRandom().nextInt(sentences.length);
+        while(IntStream.of(sentenceUse).anyMatch(x-> x == i)){
+            msg = sentences[i];
+            sentenceUse[sentenceUse.length]=i;
+        }
+        return msg;
+    }
     public void placementPersos(ArrayList<Humain> tab, int tX, int tY){
             for (int i = 0; i<tab.size(); i++){
                 switch(tab.get(i).getClass().getSimpleName()){
