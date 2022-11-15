@@ -5,7 +5,7 @@ public class Tribus_de_l_eau extends Humain{
 
     @Override
     public String getEquipe() {
-        return "eau";
+        return "E";
     }
 
     @Override
@@ -16,9 +16,9 @@ public class Tribus_de_l_eau extends Humain{
             int dePerso = lancerDeDes();
             int deAdverse = lancerDeDes();
 
-            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "feu")) {
+            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "F")) {
                 h.mort();
-            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "terre")) {
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "T")) {
                 this.mort();
             } else {
                 h.mort();

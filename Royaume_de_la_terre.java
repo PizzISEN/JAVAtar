@@ -5,7 +5,7 @@ public class Royaume_de_la_terre extends Humain{
 
     @Override
     public String getEquipe() {
-        return "terre";
+        return "T";
     }
 
     @Override
@@ -16,9 +16,9 @@ public class Royaume_de_la_terre extends Humain{
             int dePerso = lancerDeDes();
             int deAdverse = lancerDeDes();
 
-            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "eau")) {
+            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "E")) {
                 h.mort();
-            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "air")) {
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "A")) {
                 this.mort();
             } else {
                 h.mort();

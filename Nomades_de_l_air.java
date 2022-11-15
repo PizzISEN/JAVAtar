@@ -5,7 +5,7 @@ public class Nomades_de_l_air extends Humain{
 
     @Override
     public String getEquipe() {
-        return "air";
+        return "A";
     }
 
     @Override
@@ -16,9 +16,9 @@ public class Nomades_de_l_air extends Humain{
             int dePerso = lancerDeDes();
             int deAdverse = lancerDeDes();
 
-            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "terre")) {
+            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "T")) {
                 h.mort();
-            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "feu")) {
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "F")) {
                 this.mort();
             } else {
                 h.mort();

@@ -5,7 +5,7 @@ public class Nation_du_feu extends Humain {
 
     @Override
     public String getEquipe() {
-        return "feu";
+        return "F";
     }
 
     @Override
@@ -16,9 +16,9 @@ public class Nation_du_feu extends Humain {
             int dePerso = lancerDeDes();
             int deAdverse = lancerDeDes();
 
-            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "air")) {
+            if(dePerso > deAdverse || (dePerso == deAdverse && h.getEquipe() == "A")) {
                 h.mort();
-            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "eau")) {
+            } else if(dePerso < deAdverse || (dePerso == deAdverse && h.getEquipe() == "E")) {
                 this.mort();
             } else {
                 h.mort();

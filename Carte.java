@@ -43,6 +43,8 @@ public class Carte {
             carte.get(randX).get(randY).setType("O");
         }
 
+        //                                                                  CREATION DES SAFEZONES 
+
 
         //définition nombres de cases pour le seuil
         double seuil =0.4;
@@ -150,7 +152,89 @@ public class Carte {
                 carte.get(i).get(j).setType("F");
             }
         }
+
+
+        //                                              CREATION DES PERSONNAGES ET PLACEMENT, MAIS AUSSI SINGLETON
+
+        //Placement despositions dans Javatar
+        Javatar_air.getInstance().setPos(0, 0);
+        Javatar_eau.getInstance().setPos(0, s[1]-1);
+        Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
+        Javatar_terre.getInstance().setPos(s[0]-1, 0);
+
+        //Placement des positions dans la carte
+        carte.get(0).get(0).setType("Ja");
+        carte.get(0).get(size[1]-1).setType("Je");
+        carte.get(size[0]-1).get(0).setType("Jt");
+        carte.get(size[0]-1).get(size[1]-1).setType("Jf");
+        
+        double nbPersosEquipe = Math.floor(nbCase*0.04);
+
+        for (int l=0; l<nbPersosEquipe; l++){
+            tabPerso.add(new Nation_du_feu(0, 0));
+            tabPerso.add(new Nomades_de_l_air(0, 0));
+            tabPerso.add(new Tribus_de_l_eau(0, 0));
+            tabPerso.add(new Royaume_de_la_terre(0, 0));
+        }
+
+        placementPersos(tabPerso, taille_X, taille_Y);
+
     }
+
+    public void placementPersos(ArrayList<Humain> tab, int tX, int tY){
+            for (int i = 0; i<tab.size(); i++){
+                switch(tab.get(i).getClass().getSimpleName()){
+                    case "Nation_du_feu":
+                        int feuX;
+                        int feuY;
+                        
+                        do {
+                            feuX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
+                            feuY = new SecureRandom().nextInt(size[1] - (size[1]-tY)) + (size[1]-tY);
+                        } while (carte.get(feuX).get(feuY).personnage != null);
+                        tab.get(i).pos.setCoord(feuX,feuY);
+                        carte.get(feuX).get(feuY).personnage = tabPerso.get(i);
+
+                        break;
+                    case "Nomades_de_l_air":
+                        int airX;
+                        int airY;
+
+                        do {
+                            airX = new SecureRandom().nextInt(tX);
+                            airY = new SecureRandom().nextInt(tY);
+                        } while (carte.get(airX).get(airY).personnage != null);
+                        tab.get(i).pos.setCoord(airX,airY);
+                        carte.get(airX).get(airY).personnage = tabPerso.get(i);
+                        
+                        break;
+                    case "Royaume_de_la_terre":
+                        int terreX;
+                        int terreY;
+
+                        do {
+                            terreX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
+                            terreY = new SecureRandom().nextInt(tY);
+                        } while (carte.get(terreX).get(terreY).personnage != null);
+                        tab.get(i).pos.setCoord(terreX, terreY);
+                        carte.get(terreX).get(terreY).personnage = tabPerso.get(i);
+                        
+                        break;
+                    case "Tribus_de_l_eau":
+                        int eauX;
+                        int eauY;
+
+                        do {
+                            eauX = new SecureRandom().nextInt(tX);
+                            eauY = new SecureRandom().nextInt(size[0] - (size[0]-tY)) + (size[0]-tY);
+                        } while (carte.get(eauX).get(eauY).personnage != null);
+                        tab.get(i).pos.setCoord(eauX, eauY);
+                        carte.get(eauX).get(eauY).personnage = tabPerso.get(i);
+                        break;
+                }
+                
+            }
+    }        
 
     public ArrayList<Coord> caseDispo(Coord coord){        //Fonctionnelle - Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();

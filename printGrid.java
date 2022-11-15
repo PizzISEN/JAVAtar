@@ -38,14 +38,6 @@ public class printGrid
             JFrame f = new JFrame("Javatar");
             int[] s = {10,10};
             Carte c = new Carte(s);
-            Javatar_air.getInstance().setPos(0, 0);
-            Javatar_eau.getInstance().setPos(0, s[1]-1);
-            Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
-            Javatar_terre.getInstance().setPos(s[0]-1, 0);
-            // c.map[0][0] = Javatar_air.getInstance();
-            // c.map[0][0] = Javatar_eau.getInstance();
-            // c.map[0][0] = Javatar_feu.getInstance();
-            // c.map[0][0] = Javatar_terre.getInstance();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
             f.setResizable(false);
@@ -91,7 +83,7 @@ class MyPanel extends JPanel {
         processing.start();
         //Démarrage de la boucle de logique de la simulation
         //gameLoop.start();
-         c.matrice(new Coord(5,5),new Coord(8,9));
+         //c.matrice(new Coord(5,5),new Coord(8,9));
 
         
     }
