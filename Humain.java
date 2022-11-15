@@ -58,47 +58,29 @@ public abstract class Humain {
         return rand.nextInt(6);
     }
 
-    // TODO: Ajouter la gestion d'obstacles
-    public void seDeplacer(int h, int w) {
-        if (h % 2 == 1) { h += 1; }
-        if (w % 2 == 1) { w += 1; }
-        Coord centre = new Coord(h/2, w/2);
+    public void seDeplacer(Carte c) {
         int directionX, directionY;
         Boolean newPosFound = false;
+        ArrayList<Coord> casesDispo = c.caseDispo(this.getPos());
 
         int x = this.pos.getX();
         int y = this.pos.getY();
 
+        System.out.println("\n" + c + "\n");
+
         while (!newPosFound) {
 
-            directionX = new SecureRandom().nextInt(3) - 2;
-            directionY = new SecureRandom().nextInt(3) - 2;
+            directionX = new SecureRandom().nextInt(3) - 1;
+            directionY = new SecureRandom().nextInt(3) - 1;
 
-            System.out.print(directionX + " " + directionY);
+            System.out.println(directionX + " " + directionY);
 
-            newPosFound = true;
-
-            // if ((direction == 0 && x <= centre.getX()) || ((direction == 2 || direction == 3) && x > centre.getX())) {
-            //     if (this.pos.getX() > 0) {
-            //         x -= 1;
-            //         newPosFound = true;
-            //     }
-            // } else if ((direction == 0 && x > centre.getX()) || ((direction == 2 || direction == 3) && x <= centre.getX())) {
-            //     if (this.pos.getX() < h-1) {
-            //         x += 1;
-            //         newPosFound = true;
-            //     }
-            // } else if ((direction == 1 && y <= centre.getY()) || ((direction == 4 || direction == 5) && y > centre.getY())) {
-            //     if (this.pos.getY() > 0 ) {
-            //         y -= 1;
-            //         newPosFound = true;
-            //     }
-            // } else if ((direction == 1 && y > centre.getY()) || ((direction == 4 || direction == 5) && y <= centre.getY())) {
-            //     if (this.pos.getY() < w-1) {
-            //         y += 1;
-            //         newPosFound = true;
-            //     }
-            // }
+            if (casesDispo.contains(new Coord(directionX, directionY))) {
+                x += directionX;
+                y += directionY;
+                System.out.println("Moved to coords: " + directionX + " " + directionY);
+                newPosFound = true;
+            }    
         }
         
         this.pos.setCoord(x, y);
