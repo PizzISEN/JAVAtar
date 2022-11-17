@@ -3,7 +3,7 @@ import java.util.stream.IntStream;
 import java.lang.Math;
 import java.security.SecureRandom;
 import java.util.*;
-import org.json.*; 
+import org.json.simple.JSONObject;  
 
 public class Carte {
     public int[] size;
