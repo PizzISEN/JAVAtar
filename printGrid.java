@@ -357,25 +357,22 @@ class MyPanel extends JPanel {
     //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
     private Thread gameLoop = new Thread(()->{
         while (true){
-            //Bouge la position du cercle toutes les deux secondes
-            posX++;
-            if(posX==nColumns){
-                posY++;
-                posX=0;
-            }
-            if (posY==nRows){
-                posY=0;
-            }
-            //Modifie aléatoirement chacun des éléments du tableau ( 1 à 5 veut dire qu'il faut afficher une icone , 0 qu'il ne faut rien afficher)
-            
-            int temp=0;
-            for (int i=0;i<nRows;i++){
-                for (int j=0;j<nColumns;j++){
-                    temp=rdm.nextInt(6);
+            //Tableau d'index aléatoirement mélangé
+
+            //Prendre chacun des indivdus correspondant aux indexs mélangés dans l'ordre
+           
+            //Si PE >=20%
+                //appel de la fonction move aléatoire
                     
-                    grid[i][j]=temp;
-                }
-            }
+                //si l'individu est en dehors de la safezone , il pert des PE
+            //Si PE<=20%
+                //appel de la fonction move vers la safezone
+            //Si un individu est bloqué
+                //si c'est un obstacle
+                    //perd autant de PE que de pas qu'il aurait dû effectuer
+                //si c'est un individu 
+                    //déclenche rencontre
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
