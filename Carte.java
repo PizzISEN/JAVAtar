@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Carte {
     public int[] size;
-    public int[] sentenceUse;
+    public ArrayList<String> sentenceUse = new ArrayList<String>();
     public String[] dataSentences = Sentences.getInstance().messages;
     public ArrayList<ArrayList<Case>>carte;
     public ArrayList<Humain> tabPerso;
@@ -192,12 +192,13 @@ public class Carte {
     public String donnePhrase(){
         String msg="";
         int i = new SecureRandom().nextInt(dataSentences.length);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH: " + i);
-        while(IntStream.of(sentenceUse).anyMatch(x-> x == i)){  /////////////////PB ICI ////////////
-            System.out.println("SHEEEEEEESH");
+        msg = dataSentences[i];
+        while(sentenceUse.contains(msg)){
+            i = new SecureRandom().nextInt(dataSentences.length);
             msg = dataSentences[i];
-            sentenceUse[sentenceUse.length]=i;
         }
+        sentenceUse.add(msg);
+        System.out.println(msg);
         return msg;
     }
     
