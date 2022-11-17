@@ -3,7 +3,7 @@ import java.util.*;
 public class Javatar_terre extends Royaume_de_la_terre {
     private static Javatar_terre INSTANCE;
 
-    private List<String> messages;
+    private ArrayList<String> messages = new ArrayList<String>();
     private int nbOfMessages;
 
     private Javatar_terre(int x, int y) {

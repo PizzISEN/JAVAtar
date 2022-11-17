@@ -27,7 +27,6 @@ public class Carte {
         carte = new ArrayList<ArrayList<Case>>();   //tableau double entrée permettant la création de la carte de jeu
         tabPerso = new ArrayList<Humain>();     //Liste de Personnage permettant le choix de l'unité à jouer ensuite, rassemble l'ensemble des personnages en jeu
 
-        System.out.println("ICI ON EST SUR LA TAILLE DES PHRASES : " + dataSentences.length);
 
         for (int i = 0; i < s[0]; i++) {        //Création du tableau de case
             carte.add(new ArrayList<Case>());
@@ -163,12 +162,17 @@ public class Carte {
 
 
         //                                              CREATION DES PERSONNAGES ET PLACEMENT, MAIS AUSSI SINGLETON
-
+        double nbPersosEquipe = Math.floor(nbCase*0.04);
         //Placement despositions dans Javatar
         Javatar_air.getInstance().setPos(0, 0);
         Javatar_eau.getInstance().setPos(0, s[1]-1);
         Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
         Javatar_terre.getInstance().setPos(s[0]-1, 0);
+
+        Javatar_air.getInstance().SetNbOfMessages((int)nbPersosEquipe*4);
+        Javatar_eau.getInstance().SetNbOfMessages((int)nbPersosEquipe*4);
+        Javatar_feu.getInstance().SetNbOfMessages((int)nbPersosEquipe*4);
+        Javatar_terre.getInstance().SetNbOfMessages((int)nbPersosEquipe*4);
 
         //Placement des positions dans la carte
         carte.get(0).get(0).setType("Ja");
@@ -176,7 +180,6 @@ public class Carte {
         carte.get(size[0]-1).get(0).setType("Jt");
         carte.get(size[0]-1).get(size[1]-1).setType("Jf");
         
-        double nbPersosEquipe = Math.floor(nbCase*0.04);
 
         for (int l=0; l<nbPersosEquipe; l++){
             tabPerso.add(new Nation_du_feu(0, 0));
@@ -198,7 +201,6 @@ public class Carte {
             msg = dataSentences[i];
         }
         sentenceUse.add(msg);
-        System.out.println(msg);
         return msg;
     }
     
@@ -261,22 +263,22 @@ public class Carte {
     public ArrayList<Coord> caseDispo(Coord coord){        //Fonctionnelle - Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
         if(coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()).type=="0"){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY()));
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY())); //
         }
         if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && carte.get(coord.getX()+1).get(coord.getY()+1).type=="0"){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1));
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1)); //
         }
         if(coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()).type=="0"){
-            caseDispos.add(new Coord(coord.getX()-1,coord.getY()));
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY())); //
         }
         if(coord.getX()>0 &&  coord.getY()<size[1]-1 && carte.get(coord.getX()-1).get(coord.getY()+1).type=="0"){
-            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1));
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1)); //
         }
         if(coord.getY()<size[1]-1 && carte.get(coord.getX()).get(coord.getY()+1).type=="0"){
-            caseDispos.add(new Coord(coord.getX(),coord.getY()+1));
+            caseDispos.add(new Coord(coord.getX(),coord.getY()+1)); //
         }
         if(coord.getY()>0 && coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()-1).type=="0"){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1));
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1)); //
         }
         if(coord.getY()>0 && carte.get(coord.getX()).get(coord.getY()-1).type=="0"){
             caseDispos.add(new Coord(coord.getX(),coord.getY()-1));
@@ -285,6 +287,39 @@ public class Carte {
             caseDispos.add(new Coord(coord.getX()-1,coord.getY()-1));
         }
         return caseDispos;
+    }
+
+    public ArrayList<Humain> voisins(Coord coord) {
+        ArrayList<Humain> h = new ArrayList<Humain>();
+        int x = coord.getX();
+        int y = coord.getY();
+
+        if (x<size[0]-1 && carte.get(x+1).get(y).type!="O" && carte.get(x+1).get(y).type!="0") {
+            h.add(carte.get(x+1).get(y).personnage);
+        }
+        if (x<size[0]-1 && y<size[1]-1 && carte.get(x+1).get(y+1).type!="O" && carte.get(x+1).get(y+1).type!="0") {
+            h.add(carte.get(x+1).get(y+1).personnage);
+        }
+        if (x>0 && carte.get(x-1).get(y).type!="O" && carte.get(x-1).get(y).type!="0") {
+            h.add(carte.get(x-1).get(y).personnage);
+        }
+        if (x>0 && y<size[1]-1 && carte.get(x-1).get(y+1).type!="O" && carte.get(x-1).get(y+1).type!="0") {
+            h.add(carte.get(x-1).get(y+1).personnage);
+        }
+        if (y<size[1]-1 && carte.get(x).get(y+1).type!="O" && carte.get(x).get(y+1).type!="0") {
+            h.add(carte.get(x).get(y+1).personnage);
+        }
+        if (y>0 && x<size[0]-1 && carte.get(x+1).get(y-1).type!="O" && carte.get(x+1).get(y-1).type!="0") {
+            h.add(carte.get(x+1).get(y-1).personnage);
+        }
+        if (y>0 && carte.get(x).get(y-1).type!="O" && carte.get(x).get(y-1).type!="0") {
+            h.add(carte.get(x).get(y-1).personnage);
+        }
+        if (y>0 && x>0 && carte.get(x-1).get(y-1).type!="O" && carte.get(x-1).get(y-1).type!="0") {
+            h.add(carte.get(x-1).get(y-1).personnage);
+        }
+
+        return h;
     }
 
     class Node implements Comparator<Node> {

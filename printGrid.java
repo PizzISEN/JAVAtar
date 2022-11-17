@@ -20,8 +20,12 @@ import java.awt.geom.Line2D;
 import javax.swing.JButton;
 import java.awt.event.*;  
 
-import java.security.SecureRandom;
+import java.util.Collections.*;
 
+
+import java.util.List;
+import java.security.SecureRandom;
+import java.util.ArrayList;
 public class printGrid 
     {
     
@@ -94,7 +98,7 @@ class MyPanel extends JPanel {
         //Démarrage de la boucle d'affichage 
         processing.start();
         //Démarrage de la boucle de logique de la simulation
-        //gameLoop.start();
+        gameLoop.start();
         //c.matrice(new Coord(5,5),new Coord(8,9));
 
         
@@ -301,9 +305,7 @@ class MyPanel extends JPanel {
                 //Afficher une image lié au type du personnage sur la cage
                 if(c.carte.get(j).get(i).personnage!=null){
                     if(c.carte.get(j).get(i).personnage.getEquipe()=="A"){
-                        myColour= new Color(235, 235, 235, alpha);
-                        g.setColor(myColour);
-                        g.fillRect( offset+(newWidth*i)/nColumns, offset+(newHeight*j)/nRows,newWidth/nColumns, newHeight/nRows);
+                        
                         g.drawImage(air_tribe_resultingImage, offset+newWidth/(nColumns*10)+(newWidth*i)/nColumns, offset+newHeight/(nRows*10)+(newHeight*j)/nRows, null);
                         
                     }
@@ -357,21 +359,97 @@ class MyPanel extends JPanel {
     //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
     private Thread gameLoop = new Thread(()->{
         while (true){
+            ArrayList<Integer> tabIndex=new ArrayList<Integer>();
+            if(Javatar_air.getInstance().win()){
+                System.out.println("Bravo la tribu de l'air tu as gagné !");
+                break;
+            }
+            if(Javatar_terre.getInstance().win()){
+                System.out.println("Bravo la tribu de la terre tu as gagné !");
+                break;
+            }
+            if(Javatar_eau.getInstance().win()){
+                System.out.println("Bravo la tribu de l'eau tu as gagné !");
+                break;
+            }
+            if(Javatar_feu.getInstance().win()){
+                System.out.println("Bravo la tribu du feu tu as gagné !");
+                break;
+            }
             //Tableau d'index aléatoirement mélangé
-
-            //Prendre chacun des indivdus correspondant aux indexs mélangés dans l'ordre
+            for (int i=0;i<c.tabPerso.size();i++){
+                tabIndex.add(i);
+            }
+            java.util.Collections.shuffle(tabIndex,rdm);
+            
+                
            
-            //Si PE >=20%
-                //appel de la fonction move aléatoire
+            //Prendre chacun des indivdus correspondant aux indexs mélangés dans l'ordre
+            for (int index : tabIndex){
+                Humain h = c.tabPerso.get(index);
+                System.out.println("TAB INDEX SIZE: "+ tabIndex.size());
+                System.out.println("INDEX: "+ index);
+                System.out.println("\n");
+                System.out.println("HUMAIN QUI JOUE: " + h);
+
+                //Si PE <=20%
+                if(h.getEnergie()<20) 
+                {
+                    System.out.println(" g pu denrj lol");
+                    ArrayList<Coord> deplacement=new ArrayList<Coord>();
+                    //appel de la fonction move vers la safezone
+                    switch (c.tabPerso.get(index).getEquipe()){
+                        case "A":
+                             deplacement.add(c.matrice(h.getPos(),new Coord(0,0)));
+                             break;
+                        case "E":
+                             deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,0)));
+                             break;
+                        case "T":
+                             deplacement.add(c.matrice(h.getPos(),new Coord(0,c.size[1]-1)));
+                             break;
+                        case "F":
+                             deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,c.size[1]-1)));
+                             break;
+                    }
+                    c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                    // h.seDeplacer(deplacement);
+                    c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
+                } 
+                else 
+                {
+                    System.out.println(" jen ai pl1");
+                    // appel de la fonction move aléatoire
+                    c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
+                    System.out.println("je vais me déplacer");
+                    Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos())); // ici h.gePos() == newCoords
+                    System.out.println("je me suis déplacé");
+                    System.out.println(h.getPos().getX()+""+h.getPos().getY()+""+newCoords.getX()+""+newCoords.getY());
+                    c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
                     
+                
+                }
+
+                // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
+                
+                // for (Humain v : voisinsListe) {
+                //     if (h.estVivant()) {
+                //         h.rencontre(v);
+                //     }
+                // }
+
                 //si l'individu est en dehors de la safezone , il pert des PE
-            //Si PE<=20%
-                //appel de la fonction move vers la safezone
-            //Si un individu est bloqué
-                //si c'est un obstacle
-                    //perd autant de PE que de pas qu'il aurait dû effectuer
-                //si c'est un individu 
-                    //déclenche rencontre
+                // il est dans la safezone hop hop hop l'érj
+                
+                //Si PE<=20%
+                    
+                //Si un individu est bloqué
+                    //si c'est un obstacle
+                        //perd autant de PE que de pas qu'il aurait dû effectuer
+                    //si c'est un individu 
+                        //déclenche rencontre
+            }
+           
 
             try {
                 Thread.sleep(2000);
@@ -416,12 +494,6 @@ class MyPanel extends JPanel {
             System.err.println(ex.getMessage());
             ex.printStackTrace();
         }
-        
-        
-        
-       
-     
-        
         drawGrid(g);
     } 
 }

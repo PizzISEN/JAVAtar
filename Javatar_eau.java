@@ -3,7 +3,7 @@ import java.util.*;
 public class Javatar_eau extends Tribus_de_l_eau{
     private static Javatar_eau INSTANCE;
 
-    private List<String> messages;
+    private ArrayList<String> messages = new ArrayList<String>();
     private int nbOfMessages;
 
     private Javatar_eau(int x, int y) {

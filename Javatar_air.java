@@ -3,7 +3,7 @@ import java.util.*;
 public class Javatar_air extends Nomades_de_l_air {
     private static Javatar_air INSTANCE;
 
-    private List<String> messages;
+    private ArrayList<String> messages = new ArrayList<String>();
     private int nbOfMessages;
 
     private Javatar_air(int x, int y) {

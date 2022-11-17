@@ -3,7 +3,7 @@ import java.util.*;
 public class Javatar_feu extends Nation_du_feu{
     private static Javatar_feu INSTANCE;
 
-    private List<String> messages;
+    private ArrayList<String> messages = new ArrayList<String>();
     private int nbOfMessages;
 
     private Javatar_feu(int x, int y) {
