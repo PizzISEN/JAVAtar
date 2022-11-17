@@ -1,16 +1,20 @@
 import java.util.ArrayList;
 import java.util.stream.IntStream;
+
+import Sentences.Sentences;
+
 import java.lang.Math;
 import java.security.SecureRandom;
 import java.util.*;
-import org.json.simple.JSONObject;  
+
 
 public class Carte {
     public int[] size;
     public int[] sentenceUse;
+    public String[] dataSentences = Sentences.getInstance().messages;
     public ArrayList<ArrayList<Case>>carte;
     public ArrayList<Humain> tabPerso;
-
+    
     private int dist[];
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;
@@ -23,6 +27,7 @@ public class Carte {
         carte = new ArrayList<ArrayList<Case>>();   //tableau double entrée permettant la création de la carte de jeu
         tabPerso = new ArrayList<Humain>();     //Liste de Personnage permettant le choix de l'unité à jouer ensuite, rassemble l'ensemble des personnages en jeu
 
+        System.out.println("ICI ON EST SUR LA TAILLE DES PHRASES : " + dataSentences.length);
 
         for (int i = 0; i < s[0]; i++) {        //Création du tableau de case
             carte.add(new ArrayList<Case>());
@@ -181,19 +186,24 @@ public class Carte {
         }
 
         placementPersos(tabPerso, taille_X, taille_Y);
+        System.out.println(tabPerso.get(1).getMessages());
 
     }
-    public String DonnePhrase(){
+    public String donnePhrase(){
         String msg="";
-        int i = new SecureRandom().nextInt(sentences.length);
-        while(IntStream.of(sentenceUse).anyMatch(x-> x == i)){
-            msg = sentences[i];
+        int i = new SecureRandom().nextInt(dataSentences.length);
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH: " + i);
+        while(IntStream.of(sentenceUse).anyMatch(x-> x == i)){  /////////////////PB ICI ////////////
+            System.out.println("SHEEEEEEESH");
+            msg = dataSentences[i];
             sentenceUse[sentenceUse.length]=i;
         }
         return msg;
     }
+    
     public void placementPersos(ArrayList<Humain> tab, int tX, int tY){
             for (int i = 0; i<tab.size(); i++){
+                tab.get(i).ajouterMessage(donnePhrase());
                 switch(tab.get(i).getClass().getSimpleName()){
                     case "Nation_du_feu":
                         int feuX;
