@@ -67,32 +67,16 @@ public abstract class Humain {
     public Coord seDeplacer(ArrayList<Coord> casesDispo) {
         System.out.println(casesDispo);
         if (casesDispo.size() != 0) {
-            int directionX, directionY; 
-            Boolean newPosFound = false;
-
+           
+        
             int x = this.pos.getX();
             int y = this.pos.getY();
-            System.out.println("AVANT LE WHILE SE DEPLACER");
-
-            System.out.println(casesDispo.contains(new Coord(x+1, y)));
-            System.out.println(casesDispo.contains(new Coord(x+1, y+1)));
-            System.out.println(casesDispo.contains(new Coord(x+1, y-1)));
-            System.out.println(casesDispo.contains(new Coord(x-1, y+1)));
-            System.out.println(casesDispo.contains(new Coord(x-1, y)));
-            System.out.println(casesDispo.contains(new Coord(x-1, y-1)));
-
-            while (!newPosFound) {
-                directionX = new SecureRandom().nextInt(3) - 1;
-                directionY = new SecureRandom().nextInt(3) - 1;
-
-                if (casesDispo.contains(new Coord(directionX, directionY))) {
-                    x += directionX;
-                    y += directionY;
-                    System.out.println("Moved to coords: " + directionX + " " + directionY);
-                    this.energie -= 1;
-                    newPosFound = true;
-                }
-            }
+            int randomIndex=new SecureRandom().nextInt(casesDispo.size());
+            
+            x = casesDispo.get(randomIndex).getX();
+            y = casesDispo.get(randomIndex).getY();;
+            System.out.println("Moved to coords: " + x + " " + y);
+            this.energie -= 1;
             System.out.println(x+" "+y+" "+this.pos.getX()+" "+this.pos.getY()+" ");
             this.pos.setCoord(x, y);
         }

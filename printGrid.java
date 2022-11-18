@@ -422,12 +422,13 @@ class MyPanel extends JPanel {
                     // appel de la fonction move aléatoire
                     c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
                     System.out.println("je vais me déplacer");
+                    
                     Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos())); // ici h.gePos() == newCoords
                     System.out.println("je me suis déplacé");
-                    System.out.println(h.getPos().getX()+""+h.getPos().getY()+""+newCoords.getX()+""+newCoords.getY());
+                
                     c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
                     
-                
+                    
                 }
 
                 // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
@@ -448,14 +449,15 @@ class MyPanel extends JPanel {
                         //perd autant de PE que de pas qu'il aurait dû effectuer
                     //si c'est un individu 
                         //déclenche rencontre
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                    }
+        
             }
            
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-            }
-
+            
         }
     });
    
