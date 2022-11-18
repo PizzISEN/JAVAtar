@@ -260,30 +260,30 @@ public class Carte {
             }
     }        
 
-    public ArrayList<Coord> caseDispo(Coord coord){        //Fonctionnelle - Renvoi les coord des cases dispo
+    public ArrayList<Coord> caseDispo(Coord coord,String equipe){        //Fonctionnelle - Renvoi les coord des cases dispo
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
-        if(coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()).type=="0"){
+        if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()).personnage ==null){
             caseDispos.add(new Coord(coord.getX()+1,coord.getY())); //
         }
-        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && carte.get(coord.getX()+1).get(coord.getY()+1).type=="0"){
+        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && (carte.get(coord.getX()+1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()+1).type==equipe)&& carte.get(coord.getX()+1).get(coord.getY()+1).personnage ==null ){
             caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1)); //
         }
-        if(coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()).type=="0"){
+        if(coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()).type=="0"|| carte.get(coord.getX()-1).get(coord.getY()).type==equipe)&& carte.get(coord.getX()-1).get(coord.getY()).personnage ==null){
             caseDispos.add(new Coord(coord.getX()-1,coord.getY())); //
         }
-        if(coord.getX()>0 &&  coord.getY()<size[1]-1 && carte.get(coord.getX()-1).get(coord.getY()+1).type=="0"){
+        if(coord.getX()>0 &&  coord.getY()<size[1]-1 && (carte.get(coord.getX()-1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()+1).type==equipe )&& carte.get(coord.getX()-1).get(coord.getY()+1).personnage ==null){
             caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1)); //
         }
-        if(coord.getY()<size[1]-1 && carte.get(coord.getX()).get(coord.getY()+1).type=="0"){
+        if(coord.getY()<size[1]-1 && (carte.get(coord.getX()).get(coord.getY()+1).type=="0"|| carte.get(coord.getX()).get(coord.getY()+1).type==equipe)&& carte.get(coord.getX()).get(coord.getY()+1).personnage ==null){
             caseDispos.add(new Coord(coord.getX(),coord.getY()+1)); //
         }
-        if(coord.getY()>0 && coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()-1).type=="0"){
+        if(coord.getY()>0 && coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()-1).type==equipe)&& carte.get(coord.getX()+1).get(coord.getY()-1).personnage ==null){
             caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1)); //
         }
-        if(coord.getY()>0 && carte.get(coord.getX()).get(coord.getY()-1).type=="0"){
+        if(coord.getY()>0 && (carte.get(coord.getX()).get(coord.getY()-1).type=="0" || carte.get(coord.getX()).get(coord.getY()-1).type==equipe)&& carte.get(coord.getX()).get(coord.getY()-1).personnage ==null){
             caseDispos.add(new Coord(coord.getX(),coord.getY()-1));
         }
-        if(coord.getY()>0 && coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()-1).type=="0"){
+        if(coord.getY()>0 && coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()-1).type==equipe)&& carte.get(coord.getX()-1).get(coord.getY()-1).personnage ==null){
             caseDispos.add(new Coord(coord.getX()-1,coord.getY()-1));
         }
         return caseDispos;
@@ -446,7 +446,7 @@ public class Carte {
                 }
                 if(carte.get(i).get(y).type== "0"){
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(new Coord(i, y));
+                    caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),1));
                     }
@@ -454,7 +454,7 @@ public class Carte {
                 }
                 else{
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(new Coord(i, y));
+                    caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),99));
                     }
@@ -469,7 +469,7 @@ public class Carte {
         Coord sortie = new Coord();
         this.settled = new HashSet<Integer>();
         this.pq = new PriorityQueue<Node>(V, new Node());
-        caseDispos=caseDispo(depart);
+        caseDispos=caseDispo(depart,carte.get(depart.getX()).get(depart.getY()).type);
         for (int j = 0; j < caseDispos.size(); j++) {
             dijkstra(adj,caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]));
             if(distCompare<0 || dist[des]<distCompare ){

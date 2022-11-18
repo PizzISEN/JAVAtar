@@ -423,7 +423,7 @@ class MyPanel extends JPanel {
                     c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
                     System.out.println("je vais me déplacer");
                     
-                    Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos())); // ici h.gePos() == newCoords
+                    Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // ici h.gePos() == newCoords
                     System.out.println("je me suis déplacé");
                 
                     c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
