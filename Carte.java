@@ -289,7 +289,36 @@ public class Carte {
         return caseDispos;
     }
 
-    public ArrayList<Humain> voisins(Coord coord) {
+    public ArrayList<Humain> caseRencontre(Coord coord){        //Fonctionnelle - Renvoi un tebleau avec les références des humains autour
+        ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+        if(carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()).personnage);
+        }
+        if(carte.get(coord.getX()+1).get(coord.getY()+1).personnage !=null ){
+            neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()+1).personnage);
+        }
+        if( carte.get(coord.getX()-1).get(coord.getY()).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()).personnage);
+        }
+        if( carte.get(coord.getX()-1).get(coord.getY()+1).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()+1).personnage);
+        }
+        if(carte.get(coord.getX()).get(coord.getY()+1).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()).get(coord.getY()+1).personnage);
+        }
+        if( carte.get(coord.getX()+1).get(coord.getY()-1).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()-1).personnage);
+        }
+        if(carte.get(coord.getX()).get(coord.getY()-1).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()).get(coord.getY()-1).personnage);
+        }
+        if(carte.get(coord.getX()-1).get(coord.getY()-1).personnage !=null){
+            neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()-1).personnage);
+        }
+        return neighborTab;
+    }
+
+    public ArrayList<Humain> voisins(Coord coord) {     //Renvoi un tableau de 
         ArrayList<Humain> h = new ArrayList<Humain>();
         int x = coord.getX();
         int y = coord.getY();

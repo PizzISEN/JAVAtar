@@ -378,7 +378,17 @@ class MyPanel extends JPanel {
             }
             //Tableau d'index aléatoirement mélangé
             for (int i=0;i<c.tabPerso.size();i++){
-                tabIndex.add(i);
+                if(c.tabPerso.get(i).getEnergie()==0)
+                {
+                    if( c.tabPerso.get(i).estVivant()){
+                        c.carte.get(c.tabPerso.get(i).getPos().getX()).get(c.tabPerso.get(i).getPos().getY()).personnage = null;
+                        c.carte.get(c.tabPerso.get(i).getPos().getX()).get(c.tabPerso.get(i).getPos().getY()).type = "O";
+                        c.tabPerso.get(i).mort();
+                    }
+                }
+                else{
+                    tabIndex.add(i);
+                }
             }
             java.util.Collections.shuffle(tabIndex,rdm);
             
@@ -395,7 +405,6 @@ class MyPanel extends JPanel {
                 //Si PE <=20%
                 if(h.getEnergie()<20) 
                 {
-                    System.out.println(" g pu denrj lol");
                     ArrayList<Coord> deplacement=new ArrayList<Coord>();
                     //appel de la fonction move vers la safezone
                     switch (c.tabPerso.get(index).getEquipe()){
@@ -437,6 +446,12 @@ class MyPanel extends JPanel {
                     System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
                     
                     
+                }
+                ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+                neighborTab=c.caseRencontre(h.getPos());
+                for(int i=0; i< neighborTab.size(); i++){
+                
+                    System.out.println(i);
                 }
 
                 // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
