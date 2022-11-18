@@ -77,7 +77,7 @@ public abstract class Humain {
             y = casesDispo.get(randomIndex).getY();;
             System.out.println("Moved to coords: " + x + " " + y);
             this.energie -= 1;
-            System.out.println(x+" "+y+" "+this.pos.getX()+" "+this.pos.getY()+" ");
+            //System.out.println(x+" "+y+" "+this.pos.getX()+" "+this.pos.getY()+" ");
             this.pos.setCoord(x, y);
         }
 

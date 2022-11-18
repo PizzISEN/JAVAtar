@@ -384,12 +384,12 @@ class MyPanel extends JPanel {
             
                 
            
-            //Prendre chacun des indivdus correspondant aux indexs mélangés dans l'ordre
+            //Prendre chacun des indivdus correspondant aux indexs mélangés
             for (int index : tabIndex){
                 Humain h = c.tabPerso.get(index);
-                System.out.println("TAB INDEX SIZE: "+ tabIndex.size());
-                System.out.println("INDEX: "+ index);
-                System.out.println("\n");
+                //System.out.println("TAB INDEX SIZE: "+ tabIndex.size());
+                //System.out.println("INDEX: "+ index);
+                //System.out.println("\n");
                 System.out.println("HUMAIN QUI JOUE: " + h);
 
                 //Si PE <=20%
@@ -418,6 +418,13 @@ class MyPanel extends JPanel {
                 } 
                 else 
                 {
+                    //Si dans sa SafeZone
+                    if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
+                        System.out.println("Dans la safe zone");
+                        h.setEnergie(100);
+                    }
+
+                    //Début du processus de jeu
                     System.out.println(" jen ai pl1");
                     // appel de la fonction move aléatoire
                     c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
@@ -427,6 +434,7 @@ class MyPanel extends JPanel {
                     System.out.println("je me suis déplacé");
                 
                     c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
+                    System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
                     
                     
                 }
