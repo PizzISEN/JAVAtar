@@ -64,7 +64,6 @@ public abstract class Humain {
     }
 
     public Coord seDeplacer(ArrayList<Coord> casesDispo) {
-        System.out.println(casesDispo);
         if (casesDispo.size() != 0) {
            
         
@@ -74,8 +73,8 @@ public abstract class Humain {
             
             x = casesDispo.get(randomIndex).getX();
             y = casesDispo.get(randomIndex).getY();;
-            System.out.println("Moved to coords: " + x + " " + y);
-            this.energie -= 1;
+            //System.out.println("Moved to coords: " + x + " " + y);
+            this.energie -= 5;
             //System.out.println(x+" "+y+" "+this.pos.getX()+" "+this.pos.getY()+" ");
             this.pos.setCoord(x, y);
         }

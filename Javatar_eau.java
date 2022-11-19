@@ -21,9 +21,9 @@ public class Javatar_eau extends Tribus_de_l_eau{
         }
         return INSTANCE;
     }
-
-    public String GetMessage(int i){ 
-        return messages.get(i);
+    
+    public ArrayList<String> GetMessage(){ 
+        return messages;
     }
 
     public int GetNbMessage(){ 
@@ -32,7 +32,7 @@ public class Javatar_eau extends Tribus_de_l_eau{
 
     public void SetMessage(ArrayList<String> listmessage){
         for (String message : listmessage){
-            if(messages.contains(message)){
+            if(!messages.contains(message)){
                 messages.add(message);
             }
         }

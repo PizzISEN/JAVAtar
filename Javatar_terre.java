@@ -22,8 +22,8 @@ public class Javatar_terre extends Royaume_de_la_terre {
         return INSTANCE;
     }
 
-    public String GetMessage(int i){ 
-        return messages.get(i);
+    public ArrayList<String> GetMessage(){ 
+        return messages;
     }
 
     public int GetNbMessage(){ 
@@ -32,7 +32,7 @@ public class Javatar_terre extends Royaume_de_la_terre {
 
     public void SetMessage(ArrayList<String> listmessage){
         for (String message : listmessage){
-            if(messages.contains(message)){
+            if(!messages.contains(message)){
                 messages.add(message);
             }
         }

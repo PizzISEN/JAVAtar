@@ -289,30 +289,30 @@ public class Carte {
         return caseDispos;
     }
 
-    public ArrayList<Humain> caseRencontre(Coord coord){        //Fonctionnelle - Renvoi un tebleau avec les références des humains autour
+    public ArrayList<Humain> caseRencontre(Coord coord,String equipe){        //Fonctionnelle - Renvoi un tebleau avec les références des humains autour
         ArrayList<Humain> neighborTab = new ArrayList<Humain>();
-        if(coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
+        if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()).personnage);
         }
-        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && carte.get(coord.getX()+1).get(coord.getY()+1).personnage !=null ){
+        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && (carte.get(coord.getX()+1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()+1).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()+1).personnage !=null ){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()+1).personnage);
         }
-        if(coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()).personnage !=null){
+        if(coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()).type=="0"|| carte.get(coord.getX()-1).get(coord.getY()).type==equipe) && carte.get(coord.getX()-1).get(coord.getY()).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()).personnage);
         }
-        if(coord.getX()>0 && coord.getY()<size[1]-1 && carte.get(coord.getX()-1).get(coord.getY()+1).personnage !=null){
+        if(coord.getX()>0 &&  coord.getY()<size[1]-1 && (carte.get(coord.getX()-1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()+1).type==equipe ) && coord.getY()<size[1]-1 && carte.get(coord.getX()-1).get(coord.getY()+1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()+1).personnage);
         }
-        if(coord.getY()<size[1]-1 && carte.get(coord.getX()).get(coord.getY()+1).personnage !=null){
+        if(coord.getY()<size[1]-1 && (carte.get(coord.getX()).get(coord.getY()+1).type=="0"|| carte.get(coord.getX()).get(coord.getY()+1).type==equipe) && carte.get(coord.getX()).get(coord.getY()+1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()).get(coord.getY()+1).personnage);
         }
-        if(coord.getY()>0 && coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0 && coord.getX()<size[0]-1 && coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()-1).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()-1).personnage);
         }
-        if(coord.getY()>0 && carte.get(coord.getX()).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0 && (carte.get(coord.getX()).get(coord.getY()-1).type=="0" || carte.get(coord.getX()).get(coord.getY()-1).type==equipe) && carte.get(coord.getX()).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()).get(coord.getY()-1).personnage);
         }
-        if(coord.getY()>0  && coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0 && coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()-1).type==equipe) && coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()-1).personnage);
         }
         return neighborTab;
@@ -473,11 +473,11 @@ public class Carte {
                 if(dest.getX()==i && dest.getY()==y){
                     des=it;
                 }
-                if(carte.get(i).get(y).type== "0"){
+                if(carte.get(i).get(y).type== "0" && carte.get(i).get(y).personnage == null){
                     adj.add(new ArrayList<Node>());
                     caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
                     for (int j = 0; j < caseDispos.size(); j++) {
-                        adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),1));
+                        adj.get(itNode).add(new Node(caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]),1));
                     }
                     itNode++;
                 }
@@ -485,7 +485,7 @@ public class Carte {
                     adj.add(new ArrayList<Node>());
                     caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
                     for (int j = 0; j < caseDispos.size(); j++) {
-                        adj.get(itNode).add(new Node(caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]),99));
+                        adj.get(itNode).add(new Node(caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]),99));
                     }
                     itNode++;
                 }
@@ -500,9 +500,10 @@ public class Carte {
         this.pq = new PriorityQueue<Node>(V, new Node());
         caseDispos=caseDispo(depart,carte.get(depart.getX()).get(depart.getY()).type);
         for (int j = 0; j < caseDispos.size(); j++) {
-            dijkstra(adj,caseDispos.get(j).getX()+(caseDispos.get(j).getY()*size[0]));
+            dijkstra(adj,caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]));
             if(distCompare<0 || dist[des]<distCompare ){
                 distCompare=dist[des];
+                System.out.println(distCompare+"la nouvelle distance");
                 sortie=new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
             }
         }

@@ -41,10 +41,6 @@ public class printGrid
         private static void createAndShowGUI() {
             JFrame f = new JFrame("Javatar");
             
-            // c.map[0][0] = Javatar_air.getInstance();
-            // c.map[0][0] = Javatar_eau.getInstance();
-            // c.map[0][0] = Javatar_feu.getInstance();
-            // c.map[0][0] = Javatar_terre.getInstance();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.setLocationRelativeTo(null);
             f.setResizable(false);
@@ -84,12 +80,12 @@ class MyPanel extends JPanel {
 
         //Configuration et création de la fenêtre dans l'interface graphique 
         
-        int[] s =  personnalSetup();
+        int[] s = personnalSetup();
         c = new Carte(s);
-        Javatar_air.getInstance().setPos(0, 0);
+        /*Javatar_air.getInstance().setPos(0, 0);
         Javatar_eau.getInstance().setPos(0, s[1]-1);
         Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
-        Javatar_terre.getInstance().setPos(s[0]-1, 0);
+        Javatar_terre.getInstance().setPos(s[0]-1, 0);*/
         
         setBorder(BorderFactory.createLineBorder(Color.black));
        
@@ -155,7 +151,6 @@ class MyPanel extends JPanel {
             fire_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -163,7 +158,6 @@ class MyPanel extends JPanel {
             earth_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -171,7 +165,6 @@ class MyPanel extends JPanel {
             water_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -179,7 +172,6 @@ class MyPanel extends JPanel {
             air_tribe_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -187,7 +179,6 @@ class MyPanel extends JPanel {
             fire_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -195,7 +186,6 @@ class MyPanel extends JPanel {
             earth_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -203,7 +193,6 @@ class MyPanel extends JPanel {
             water_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -211,7 +200,6 @@ class MyPanel extends JPanel {
             air_master_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
@@ -219,7 +207,6 @@ class MyPanel extends JPanel {
             stone_resultingImage= image.getScaledInstance((newWidth*4)/(nColumns*5), (newHeight*4)/(nRows*5), Image.SCALE_DEFAULT);
     
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return(size);
@@ -358,24 +345,9 @@ class MyPanel extends JPanel {
 
     //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
     private Thread gameLoop = new Thread(()->{
-        while (true){
+        boolean continuer=true;
+        while (continuer){
             ArrayList<Integer> tabIndex=new ArrayList<Integer>();
-            if(Javatar_air.getInstance().win()){
-                System.out.println("Bravo la tribu de l'air tu as gagné !");
-                break;
-            }
-            if(Javatar_terre.getInstance().win()){
-                System.out.println("Bravo la tribu de la terre tu as gagné !");
-                break;
-            }
-            if(Javatar_eau.getInstance().win()){
-                System.out.println("Bravo la tribu de l'eau tu as gagné !");
-                break;
-            }
-            if(Javatar_feu.getInstance().win()){
-                System.out.println("Bravo la tribu du feu tu as gagné !");
-                break;
-            }
             //Tableau d'index aléatoirement mélangé
             for (int i=0;i<c.tabPerso.size();i++){
                 if(c.tabPerso.get(i).getEnergie()==0 || c.tabPerso.get(i).estVivant() == false)
@@ -390,40 +362,6 @@ class MyPanel extends JPanel {
                     tabIndex.add(i);
                 }
             }
-            if(tabIndex.size()==0){
-                int [] nbMessages = new int [4];
-                nbMessages[0]=Javatar_air.getInstance().GetNbMessage();
-                nbMessages[1]=Javatar_eau.getInstance().GetNbMessage();
-                nbMessages[2]=Javatar_terre.getInstance().GetNbMessage();
-                nbMessages[3]=Javatar_feu.getInstance().GetNbMessage();
-                // Initialize maximum element
-                int max = nbMessages[0];
-                int i=0;
-                
-                // Traverse array elements from second and
-                // compare every element with current max
-                for (int o = 1; o < nbMessages.length; o++){
-                    if (nbMessages[o] > max){
-                        max = nbMessages[o];
-                        i=o;
-                    }
-                }
-
-                switch (i){
-                    case 0:
-                        System.out.println("Bravo la tribu de l'air tu as gagné !");
-                         break;
-                    case 1:
-                        System.out.println("Bravo la tribu de la terre tu as gagné !");
-                         break;
-                    case 2:
-                        System.out.println("Bravo la tribu de l'eau tu as gagné !");    
-                         break;
-                    case 3:
-                        System.out.println("Bravo la tribu du feu tu as gagné !");
-                         break;
-                }
-            }
             java.util.Collections.shuffle(tabIndex,rdm);
             
                 
@@ -431,85 +369,169 @@ class MyPanel extends JPanel {
             //Prendre chacun des indivdus correspondant aux indexs mélangés
             for (int index : tabIndex){
                 Humain h = c.tabPerso.get(index);
-                //System.out.println("TAB INDEX SIZE: "+ tabIndex.size());
-                //System.out.println("INDEX: "+ index);
-                //System.out.println("\n");
+
                 System.out.println("HUMAIN QUI JOUE: " + h);
 
-                //Si PE <=20%
-                if(h.getEnergie()<20) 
-                {
-                    ArrayList<Coord> deplacement=new ArrayList<Coord>();
-                    //appel de la fonction move vers la safezone
-                    switch (c.tabPerso.get(index).getEquipe()){
-                        case "A":
-                             deplacement.add(c.matrice(h.getPos(),new Coord(0,0)));
-                             break;
-                        case "E":
-                             deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,0)));
-                             break;
-                        case "T":
-                             deplacement.add(c.matrice(h.getPos(),new Coord(0,c.size[1]-1)));
-                             break;
-                        case "F":
-                             deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,c.size[1]-1)));
-                             break;
-                    }
-                    c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
-                    h.seDeplacer(deplacement);
-                    c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
-                } 
-                else 
-                {
-                    //Si dans sa SafeZone
-                    if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
-                        System.out.println("Dans la safe zone");
-                        h.setEnergie(100);
+                
+                if( c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage != null){
+                    //Si PE <=20%
+                    if(h.getEnergie()<20) 
+                    {
+                        System.out.println("DJJJJJJJJJJJJJJJJJJJJJJJJJJJIKSTRA");
+                        ArrayList<Coord> deplacement=new ArrayList<Coord>();
+                        //appel de la fonction move vers la safezone
                         switch (c.tabPerso.get(index).getEquipe()){
                             case "A":
-                                 Javatar_air.getInstance().SetMessage(h.getMessages());
-                                 break;
+                                deplacement.add(c.matrice(h.getPos(),new Coord(0,0)));
+                                break;
                             case "E":
-                                Javatar_eau.getInstance().SetMessage(h.getMessages());
-                                 break;
+                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,0)));
+                                break;
                             case "T":
-                                Javatar_terre.getInstance().SetMessage(h.getMessages());
-                                 break;
+                                deplacement.add(c.matrice(h.getPos(),new Coord(0,c.size[1]-1)));
+                                break;
                             case "F":
-                                Javatar_feu.getInstance().SetMessage(h.getMessages());
-                                 break;
+                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,c.size[1]-1)));
+                                break;
                         }
+                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                        h.seDeplacer(deplacement);
+                        c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
+                    } 
+                    else 
+                    {
+                        //Si dans sa SafeZone
+                        if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
+                            System.out.println("Dans la safe zone \n \n");
+                            h.setEnergie(100);
+                            switch (h.getEquipe()){     // Pour échange de messages avec le javatar de l'équipe et verif de la win condition
+                                case "A":
+                                    Javatar_air.getInstance().SetMessage(h.getMessages());
+
+                                    //Monsieur DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
+                                    //System.out.println("Echange msg AIR");
+                                    System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
+                                    //System.out.print(Javatar_air.getInstance().GetMessage());
+                                    System.out.println("\n");
+
+
+                                    
+                                    break;
+
+                                case "E":
+                                    Javatar_eau.getInstance().SetMessage(h.getMessages());
+                                    //System.out.println("Echange msg EAU");
+                                    System.out.println("MSG JAVATAR EAU: " + Javatar_eau.getInstance().GetNbMessage());
+                                    //System.out.print(Javatar_eau.getInstance().GetMessage());
+                                    System.out.println("\n");
+
+                                    break;
+                                case "T":
+                                    Javatar_terre.getInstance().SetMessage(h.getMessages());
+                                    //System.out.println("Echange msg TERRE");
+                                    System.out.println("MSG JAVATAR TERRE: " + Javatar_terre.getInstance().GetNbMessage());
+                                    //System.out.println(Javatar_terre.getInstance().GetMessage());
+                                    System.out.println("\n");
+
+                                    break;
+                                case "F":
+                                    Javatar_feu.getInstance().SetMessage(h.getMessages());
+                                    //System.out.println("Echange msg FEU");
+                                    System.out.println("MSG JAVATAR FEU: " + Javatar_feu.getInstance().GetNbMessage());
+                                    //System.out.println(Javatar_feu.getInstance().GetMessage());
+                                    System.out.println("\n");
+
+                                    break;
+                            }
+                            
+                        }
+
+                        //Début du processus de jeu
+                        // appel de la fonction move aléatoire
+                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
+                        
+                        Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // ici h.gePos() == newCoords
+                    
+                        c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
+                        System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
+                        ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+                        neighborTab=c.caseRencontre(newCoords,c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type);
+
+                        /*for(int i=0; i< neighborTab.size(); i++){
+                            int rencontre = h.rencontre(neighborTab.get(i));
+
+                            //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de message inter équipe en décommentant les println
+                            //Vous verrez combien de messages ont été echangé
+                            //System.out.println("ECHANGE MSG RENCONTRE: " + h.getMessages().size());
+                            //System.out.println("\n");
+
+                            if(rencontre==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
+                                c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                                c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type = "O";
+                            }
+                            else if(rencontre==1){
+                                c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).personnage = null;
+                                c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).type = "O";
+                            }
+                        }*/
                         
                     }
-
-                    //Début du processus de jeu
-                    System.out.println(" jen ai pl1");
-                    // appel de la fonction move aléatoire
-                    c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
-                    System.out.println("je vais me déplacer");
-                    
-                    Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // ici h.gePos() == newCoords
-                    System.out.println("je me suis déplacé");
-                
-                    c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
-                    System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
-                    ArrayList<Humain> neighborTab = new ArrayList<Humain>();
-                    neighborTab=c.caseRencontre(newCoords);
-                    System.out.println("NEIGHBORTAB: " + neighborTab);
-                    for(int i=0; i< neighborTab.size(); i++){
-                        int test =h.rencontre(neighborTab.get(i));
-                        if(test==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
-                            c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
-                            c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type = "O";
-                        }
-                        else if(test==1){
-                            c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).personnage = null;
-                            c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).type = "O";
-                        }
+                    //Win conditions
+                    if(Javatar_terre.getInstance().win()){
+                        System.out.println("Bravo la tribu de la terre tu as gagné !");
+                        continuer=false;
+                        break;
                     }
-                    
+                    if(Javatar_feu.getInstance().win()){
+                        System.out.println("Bravo la tribu du feu tu as gagné !");
+                        continuer=false;
+                        break;
+                    }
+                    if(Javatar_eau.getInstance().win()){
+                        System.out.println("Bravo la tribu de l'eau tu as gagné !");
+                        continuer=false;
+                        break;
+                    }
+                    if(Javatar_air.getInstance().win()){
+                        System.out.println("Bravo la tribu de l'air tu as gagné !");
+                        continuer=false;
+                        break;
+                    }
                 }
-                
+                if(tabIndex.size()==0){
+                        int [] nbMessages = new int [4];
+                        nbMessages[0]=Javatar_air.getInstance().GetNbMessage();
+                        nbMessages[1]=Javatar_eau.getInstance().GetNbMessage();
+                        nbMessages[2]=Javatar_terre.getInstance().GetNbMessage();
+                        nbMessages[3]=Javatar_feu.getInstance().GetNbMessage();
+                        // Initialize maximum element
+                        int max = nbMessages[0];
+                        int i=0;
+                        
+                        // Traverse array elements from second and
+                        // compare every element with current max
+                        for (int o = 1; o < nbMessages.length; o++){
+                            if (nbMessages[o] > max){
+                                max = nbMessages[o];
+                                i=o;
+                            }
+                        }
+
+                        switch (i){
+                            case 0:
+                                System.out.println("Bravo la tribu de l'air tu as gagné !");
+                                continuer=false;
+                            case 1:
+                                System.out.println("Bravo la tribu de la terre tu as gagné !");
+                                continuer=false;
+                            case 2:
+                                System.out.println("Bravo la tribu de l'eau tu as gagné !");  
+                                continuer=false; 
+                            case 3:
+                                System.out.println("Bravo la tribu du feu tu as gagné !");
+                                continuer=false;
+                        }
+                }
 
                 // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
                 
@@ -547,7 +569,7 @@ class MyPanel extends JPanel {
             
             this.repaint();
             try {
-                Thread.sleep(1000/fps);
+                Thread.sleep(2000/fps);
             } catch (InterruptedException ex) {
             }
         }
