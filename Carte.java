@@ -291,28 +291,28 @@ public class Carte {
 
     public ArrayList<Humain> caseRencontre(Coord coord){        //Fonctionnelle - Renvoi un tebleau avec les références des humains autour
         ArrayList<Humain> neighborTab = new ArrayList<Humain>();
-        if(carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
+        if(coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()).personnage);
         }
-        if(carte.get(coord.getX()+1).get(coord.getY()+1).personnage !=null ){
+        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && carte.get(coord.getX()+1).get(coord.getY()+1).personnage !=null ){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()+1).personnage);
         }
-        if( carte.get(coord.getX()-1).get(coord.getY()).personnage !=null){
+        if(coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()).personnage);
         }
-        if( carte.get(coord.getX()-1).get(coord.getY()+1).personnage !=null){
+        if(coord.getX()>0 && coord.getY()<size[1]-1 && carte.get(coord.getX()-1).get(coord.getY()+1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()+1).personnage);
         }
-        if(carte.get(coord.getX()).get(coord.getY()+1).personnage !=null){
+        if(coord.getY()<size[1]-1 && carte.get(coord.getX()).get(coord.getY()+1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()).get(coord.getY()+1).personnage);
         }
-        if( carte.get(coord.getX()+1).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0 && coord.getX()<size[0]-1 && carte.get(coord.getX()+1).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()-1).personnage);
         }
-        if(carte.get(coord.getX()).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0 && carte.get(coord.getX()).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()).get(coord.getY()-1).personnage);
         }
-        if(carte.get(coord.getX()-1).get(coord.getY()-1).personnage !=null){
+        if(coord.getY()>0  && coord.getX()>0 && carte.get(coord.getX()-1).get(coord.getY()-1).personnage !=null){
             neighborTab.add(carte.get(coord.getX()-1).get(coord.getY()-1).personnage);
         }
         return neighborTab;

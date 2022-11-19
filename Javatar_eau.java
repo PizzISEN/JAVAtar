@@ -26,9 +26,15 @@ public class Javatar_eau extends Tribus_de_l_eau{
         return messages.get(i);
     }
 
-    public void SetMessage(String message){ 
-        if(messages.contains(message)){
-            messages.add(message);
+    public int GetNbMessage(){ 
+        return messages.size();
+    }
+
+    public void SetMessage(ArrayList<String> listmessage){
+        for (String message : listmessage){
+            if(messages.contains(message)){
+                messages.add(message);
+            }
         }
         return ;
     }

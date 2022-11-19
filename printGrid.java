@@ -378,7 +378,7 @@ class MyPanel extends JPanel {
             }
             //Tableau d'index aléatoirement mélangé
             for (int i=0;i<c.tabPerso.size();i++){
-                if(c.tabPerso.get(i).getEnergie()==0)
+                if(c.tabPerso.get(i).getEnergie()==0 || c.tabPerso.get(i).estVivant() == false)
                 {
                     if( c.tabPerso.get(i).estVivant()){
                         c.carte.get(c.tabPerso.get(i).getPos().getX()).get(c.tabPerso.get(i).getPos().getY()).personnage = null;
@@ -388,6 +388,40 @@ class MyPanel extends JPanel {
                 }
                 else{
                     tabIndex.add(i);
+                }
+            }
+            if(tabIndex.size()==0){
+                int [] nbMessages = new int [4];
+                nbMessages[0]=Javatar_air.getInstance().GetNbMessage();
+                nbMessages[1]=Javatar_eau.getInstance().GetNbMessage();
+                nbMessages[2]=Javatar_terre.getInstance().GetNbMessage();
+                nbMessages[3]=Javatar_feu.getInstance().GetNbMessage();
+                // Initialize maximum element
+                int max = nbMessages[0];
+                int i=0;
+                
+                // Traverse array elements from second and
+                // compare every element with current max
+                for (int o = 1; o < nbMessages.length; o++){
+                    if (nbMessages[o] > max){
+                        max = nbMessages[o];
+                        i=o;
+                    }
+                }
+
+                switch (i){
+                    case 0:
+                        System.out.println("Bravo la tribu de l'air tu as gagné !");
+                         break;
+                    case 1:
+                        System.out.println("Bravo la tribu de la terre tu as gagné !");
+                         break;
+                    case 2:
+                        System.out.println("Bravo la tribu de l'eau tu as gagné !");    
+                         break;
+                    case 3:
+                        System.out.println("Bravo la tribu du feu tu as gagné !");
+                         break;
                 }
             }
             java.util.Collections.shuffle(tabIndex,rdm);
@@ -422,7 +456,7 @@ class MyPanel extends JPanel {
                              break;
                     }
                     c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
-                    // h.seDeplacer(deplacement);
+                    h.seDeplacer(deplacement);
                     c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
                 } 
                 else 
@@ -431,6 +465,21 @@ class MyPanel extends JPanel {
                     if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
                         System.out.println("Dans la safe zone");
                         h.setEnergie(100);
+                        switch (c.tabPerso.get(index).getEquipe()){
+                            case "A":
+                                 Javatar_air.getInstance().SetMessage(h.getMessages());
+                                 break;
+                            case "E":
+                                Javatar_eau.getInstance().SetMessage(h.getMessages());
+                                 break;
+                            case "T":
+                                Javatar_terre.getInstance().SetMessage(h.getMessages());
+                                 break;
+                            case "F":
+                                Javatar_feu.getInstance().SetMessage(h.getMessages());
+                                 break;
+                        }
+                        
                     }
 
                     //Début du processus de jeu
@@ -444,15 +493,23 @@ class MyPanel extends JPanel {
                 
                     c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
                     System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
-                    
+                    ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+                    neighborTab=c.caseRencontre(newCoords);
+                    System.out.println("NEIGHBORTAB: " + neighborTab);
+                    for(int i=0; i< neighborTab.size(); i++){
+                        int test =h.rencontre(neighborTab.get(i));
+                        if(test==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
+                            c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                            c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type = "O";
+                        }
+                        else if(test==1){
+                            c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).personnage = null;
+                            c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).type = "O";
+                        }
+                    }
                     
                 }
-                ArrayList<Humain> neighborTab = new ArrayList<Humain>();
-                neighborTab=c.caseRencontre(h.getPos());
-                for(int i=0; i< neighborTab.size(); i++){
                 
-                    System.out.println(i);
-                }
 
                 // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
                 
@@ -473,7 +530,7 @@ class MyPanel extends JPanel {
                     //si c'est un individu 
                         //déclenche rencontre
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException ex) {
                     }
         

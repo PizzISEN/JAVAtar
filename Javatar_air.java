@@ -26,9 +26,15 @@ public class Javatar_air extends Nomades_de_l_air {
         return messages.get(i);
     }
 
-    public void SetMessage(String message){ 
-        if(messages.contains(message)){
-            messages.add(message);
+    public int GetNbMessage(){ 
+        return messages.size();
+    }
+
+    public void SetMessage(ArrayList<String> listmessage){
+        for (String message : listmessage){
+            if(messages.contains(message)){
+                messages.add(message);
+            }
         }
         return ;
     }

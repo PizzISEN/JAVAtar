@@ -63,7 +63,6 @@ public abstract class Humain {
         return rand.nextInt(6);
     }
 
-    // TODO fix cette merde
     public Coord seDeplacer(ArrayList<Coord> casesDispo) {
         System.out.println(casesDispo);
         if (casesDispo.size() != 0) {
@@ -85,5 +84,5 @@ public abstract class Humain {
     }
 
     public abstract String getEquipe();
-    public abstract void rencontre(Humain h);
+    public abstract int rencontre(Humain h);
 }
