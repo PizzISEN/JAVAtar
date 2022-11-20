@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import Coordonnees.Coord;
 import Personnage.*;
 import Map.*;
-import DjikstraAlgorithm.*;
 
 public class printGrid 
     {
@@ -364,7 +363,7 @@ class MyPanel extends JPanel {
                 if( c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage != null){
                     //Si dans sa SafeZone
                     if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
-                        System.out.println("Dans la safe zone \n \n");
+                        // System.out.println("Dans la safe zone \n \n");
                         h.setEnergie(50);
                         switch (h.getEquipe()){     // Pour échange de messages avec le javatar de l'équipe et verif de la win condition
                             case "A":
@@ -373,36 +372,33 @@ class MyPanel extends JPanel {
                                 //MONSIEUR DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
                                 
                                 //System.out.println("Echange msg AIR");
-                                System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
+                                // System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
                                 //System.out.print(Javatar_air.getInstance().GetMessage());
-                                System.out.println("\n");
+                                // System.out.println("\n");
 
-
-                                
                                 break;
-
                             case "E":
                                 Javatar_eau.getInstance().SetMessage(h.getMessages());
                                 //System.out.println("Echange msg EAU");
-                                System.out.println("MSG JAVATAR EAU: " + Javatar_eau.getInstance().GetNbMessage());
+                                // System.out.println("MSG JAVATAR EAU: " + Javatar_eau.getInstance().GetNbMessage());
                                 //System.out.print(Javatar_eau.getInstance().GetMessage());
-                                System.out.println("\n");
+                                // System.out.println("\n");
 
                                 break;
                             case "T":
                                 Javatar_terre.getInstance().SetMessage(h.getMessages());
                                 //System.out.println("Echange msg TERRE");
-                                System.out.println("MSG JAVATAR TERRE: " + Javatar_terre.getInstance().GetNbMessage());
+                                // System.out.println("MSG JAVATAR TERRE: " + Javatar_terre.getInstance().GetNbMessage());
                                 //System.out.println(Javatar_terre.getInstance().GetMessage());
-                                System.out.println("\n");
+                                // System.out.println("\n");
 
                                 break;
                             case "F":
                                 Javatar_feu.getInstance().SetMessage(h.getMessages());
                                 //System.out.println("Echange msg FEU");
-                                System.out.println("MSG JAVATAR FEU: " + Javatar_feu.getInstance().GetNbMessage());
+                                // System.out.println("MSG JAVATAR FEU: " + Javatar_feu.getInstance().GetNbMessage());
                                 //System.out.println(Javatar_feu.getInstance().GetMessage());
-                                System.out.println("\n");
+                                // System.out.println("\n");
 
                                 break;
                         }
@@ -462,7 +458,6 @@ class MyPanel extends JPanel {
                         Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // Nouvelle position du personnage
                     
                         c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
-                        System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
                         ArrayList<Humain> neighborTab = new ArrayList<Humain>();
                         neighborTab=c.caseRencontre(newCoords,c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type);
 

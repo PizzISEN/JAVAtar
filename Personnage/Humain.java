@@ -15,7 +15,7 @@ public abstract class Humain {
         // Setter des coordonnées de l'humain
         this.pos.setCoord(x, y);
         // Chaque humain est initialisé vivant et avec une énergie de 50
-        this.energie = 50;
+        this.energie = 30;
         this.vivant = true;
     }
 

@@ -189,7 +189,6 @@ public class Carte {
         }
 
         placementPersos(tabPerso, taille_X, taille_Y);
-        System.out.println(tabPerso.get(1).getMessages());
 
     }
     public String donnePhrase(){
@@ -356,39 +355,6 @@ public class Carte {
         return caseDispos;
     }
 
-    public ArrayList<Humain> voisins(Coord coord) {     //Renvoi un tableau de voisins pour une coordonnée donnée
-        ArrayList<Humain> h = new ArrayList<Humain>();
-        int x = coord.getX();
-        int y = coord.getY();
-
-        if (x<size[0]-1 && carte.get(x+1).get(y).type!="O" && carte.get(x+1).get(y).type!="0") {
-            h.add(carte.get(x+1).get(y).personnage);
-        }
-        if (x<size[0]-1 && y<size[1]-1 && carte.get(x+1).get(y+1).type!="O" && carte.get(x+1).get(y+1).type!="0") {
-            h.add(carte.get(x+1).get(y+1).personnage);
-        }
-        if (x>0 && carte.get(x-1).get(y).type!="O" && carte.get(x-1).get(y).type!="0") {
-            h.add(carte.get(x-1).get(y).personnage);
-        }
-        if (x>0 && y<size[1]-1 && carte.get(x-1).get(y+1).type!="O" && carte.get(x-1).get(y+1).type!="0") {
-            h.add(carte.get(x-1).get(y+1).personnage);
-        }
-        if (y<size[1]-1 && carte.get(x).get(y+1).type!="O" && carte.get(x).get(y+1).type!="0") {
-            h.add(carte.get(x).get(y+1).personnage);
-        }
-        if (y>0 && x<size[0]-1 && carte.get(x+1).get(y-1).type!="O" && carte.get(x+1).get(y-1).type!="0") {
-            h.add(carte.get(x+1).get(y-1).personnage);
-        }
-        if (y>0 && carte.get(x).get(y-1).type!="O" && carte.get(x).get(y-1).type!="0") {
-            h.add(carte.get(x).get(y-1).personnage);
-        }
-        if (y>0 && x>0 && carte.get(x-1).get(y-1).type!="O" && carte.get(x-1).get(y-1).type!="0") {
-            h.add(carte.get(x-1).get(y-1).personnage);
-        }
-
-        return h;
-    }
-
     class Node implements Comparator<Node> {
     
         // Member variables of this class
@@ -497,22 +463,18 @@ public class Carte {
     {
         List<List<Node> > adj = new ArrayList<List<Node> >();
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();    
-        //int dep;
         int des=0;
         int it=0;
         int itNode=0;
-       this.adj
-            = new ArrayList<List<Node> >();
-        for (int i = 0; i < size[0]; i++) {
+       this.adj = new ArrayList<List<Node> >();
+        for (int i = 0; i < size[0]; i++) { // boucle permettant la création des différents noeuds et différents liens entre ceux-ci avec les coût associés
             for (int y = 0; y < size[1]; y++) {
-                /*if(depart.getY()==i && depart.getX()==y){
-                    dep=it;
-                }*/
                 if(dest.getY()==i && dest.getX()==y){
                     des=it;
                 }
 
-                if(carte.get(i).get(y).type== "0" ||carte.get(i).get(y).type== equipe ||carte.get(i).get(y).personnage != null){
+                if(carte.get(i).get(y).type== "0" ||carte.get(i).get(y).type== equipe ||carte.get(i).get(y).personnage != null){ // on donne une distance de 1 pour les cases de safezone vide ou personnage 
+                //(on prend le parti que le personnage va bouger et le problème est géré juste après)
                     adj.add(new ArrayList<Node>());
                     caseDispos=caseDispoDjikstra(new Coord(i, y),equipe);
                     for (int j = 0; j < caseDispos.size(); j++) {
@@ -520,7 +482,7 @@ public class Carte {
                     }
                     itNode++;
                 }
-                else{
+                else{ // ici ce sont des obstacles alors la distance est égale à 99
                     adj.add(new ArrayList<Node>());
                     caseDispos=caseDispoDjikstra(new Coord(i, y),equipe);
                     for (int j = 0; j < caseDispos.size(); j++) {
@@ -531,17 +493,13 @@ public class Carte {
                 it++;
             }
         }
-        this.V = itNode;
-        this.dist = new int[V];
         int distCompare = -1;
         Coord sortie = new Coord();
-        this.settled = new HashSet<Integer>();
-        this.pq = new PriorityQueue<Node>(V, new Node());
         caseDispos=caseDispo(depart,equipe);
 
-        //System.out.println(dist[des]+"pour");
 
-        for (int j = 0; j < caseDispos.size(); j++) {
+        for (int j = 0; j < caseDispos.size(); j++) { //ici on parcours pour toute les cases alentours de la case actuelle Djikstra et on en ressort la case avec
+        //la distance avec la destination la plus faible possible ( ici on gère également l'exception des personnages car caseDispo ne renvoie pas les cases avec des personnages)
             this.V = itNode;
             this.dist = new int[V];
             this.settled = new HashSet<Integer>();
