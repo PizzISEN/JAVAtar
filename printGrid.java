@@ -10,22 +10,20 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.BasicStroke;
 import java.awt.Image;
 import java.awt.geom.Line2D;
 
-import javax.swing.JButton;
-import java.awt.event.*;  
 
-import java.util.Collections.*;
-
-
-import java.util.List;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+
+import Coordonnees.Coord;
+import Personnage.*;
+import Map.*;
+import DjikstraAlgorithm.*;
+
 public class printGrid 
     {
     
@@ -50,9 +48,11 @@ public class printGrid
         }
     }
 
+        // AFFICHAGE
+
 class MyPanel extends JPanel {
     private Carte c;
-    private volatile int posX=0,posY=0;
+    // private volatile int posX=0,posY=0;
     private int widthSize=800,heightSize=800;
     private int offset=80;
     private int nRows=0,nColumns=0;
@@ -61,7 +61,7 @@ class MyPanel extends JPanel {
     private int newWidth=widthSize-2*offset,newHeight=heightSize-2*offset;// On définit newWidth et newHeight qui sont les nouvelles largeur et hauteur du carré sur lequel on va vraiment dessiner le terrain(sans les offset)
     private SecureRandom rdm= new SecureRandom();
   
-    private volatile int[][] grid=new int[nRows][nColumns];
+    // private volatile int[][] grid=new int[nRows][nColumns];
 
     //Création des références pour les images liés à chacune des tribus
     private BufferedImage image=null;
@@ -75,6 +75,7 @@ class MyPanel extends JPanel {
     private Image earth_master_resultingImage=null;
     private Image stone_resultingImage=null;
 
+    //Fonctions permettant l'affichage, se termine au niveau de la fonction Gameloop
     
     public MyPanel() {
 
@@ -82,14 +83,8 @@ class MyPanel extends JPanel {
         
         int[] s = personnalSetup();
         c = new Carte(s);
-        /*Javatar_air.getInstance().setPos(0, 0);
-        Javatar_eau.getInstance().setPos(0, s[1]-1);
-        Javatar_feu.getInstance().setPos(s[0]-1, s[1]-1);
-        Javatar_terre.getInstance().setPos(s[0]-1, 0);*/
         
         setBorder(BorderFactory.createLineBorder(Color.black));
-       
-        //setupGrid();
 
         //Démarrage de la boucle d'affichage 
         processing.start();
@@ -211,18 +206,6 @@ class MyPanel extends JPanel {
         }
         return(size);
     };
-    //Initialise toutes les valeurs de grid à 0 
-    private void setupGrid(){
-        for (int i=0;i<nRows;i++){
-            for (int j=0;j<nColumns;j++){
-                grid[i][j]=0;
-            }
-        }
-
-    }
-
-    
-    
     
     public Dimension getPreferredSize() {
         return new Dimension(widthSize,heightSize);
@@ -344,10 +327,14 @@ class MyPanel extends JPanel {
     }
 
     //Thread qui s'occupe de modifier aléatoirement la position des cercles dans le tableau 
+    //Thread de gameloop 
     private Thread gameLoop = new Thread(()->{
-        boolean continuer=true;
+        boolean continuer=true;     //Variable de break de gameloop
+
         while (continuer){
+
             ArrayList<Integer> tabIndex=new ArrayList<Integer>();
+
             //Tableau d'index aléatoirement mélangé
             for (int i=0;i<c.tabPerso.size();i++){
                 if(c.tabPerso.get(i).getEnergie()==0 || c.tabPerso.get(i).estVivant() == false)
@@ -362,7 +349,7 @@ class MyPanel extends JPanel {
                     tabIndex.add(i);
                 }
             }
-            java.util.Collections.shuffle(tabIndex,rdm);
+            java.util.Collections.shuffle(tabIndex,rdm);    //On mélange le tableau afin de rendre aléatoire les tours de jeu
             
                 
            
@@ -370,7 +357,8 @@ class MyPanel extends JPanel {
             for (int index : tabIndex){
                 Humain h = c.tabPerso.get(index);
 
-                System.out.println("HUMAIN QUI JOUE: " + h);
+                //ICI MONSIEUR DELEPLANQUE, si vous voulez voir quel personnage joue et son équipe, décommentez la ligne ci-dessous
+                //System.out.println("HUMAIN QUI JOUE: " + h);
 
                 
                 if( c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage != null){
@@ -382,7 +370,8 @@ class MyPanel extends JPanel {
                             case "A":
                                 Javatar_air.getInstance().SetMessage(h.getMessages());
 
-                                //Monsieur DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
+                                //MONSIEUR DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
+                                
                                 //System.out.println("Echange msg AIR");
                                 System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
                                 //System.out.print(Javatar_air.getInstance().GetMessage());
@@ -421,9 +410,8 @@ class MyPanel extends JPanel {
                     //Si PE <=20%
                     if(h.getEnergie()<=20) 
                     {
-                        System.out.println("DJJJJJJJJJJJJJJJJJJJJJJJJJJJIKSTRA");
                         ArrayList<Coord> deplacement=new ArrayList<Coord>();
-                        //appel de la fonction move vers la safezone
+                        //appel de la fonction move vers la safezone avec Djikstra
                         switch (c.tabPerso.get(index).getEquipe()){
                             case "A":
                                 deplacement.add(c.matrice(h.getPos(),new Coord(1,1),"A"));
@@ -438,13 +426,14 @@ class MyPanel extends JPanel {
                                 deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-2,c.size[1]-2),"F"));
                                 break;
                         }
-                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;        //Changement de position, on enlève l'ancienne et on fixe le personnage sur la nouvelle
                         h.seDeplacer(deplacement);
                         c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
-                        ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+
+                        ArrayList<Humain> neighborTab = new ArrayList<Humain>();        //tableau des voisins
                         neighborTab=c.caseRencontre(deplacement.get(0),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type);
 
-                        for(int i=0; i< neighborTab.size(); i++){
+                        for(int i=0; i< neighborTab.size(); i++){       //Parcours du tableau des voisins pour effectuer les rencontres s'il y en a
                             int rencontre = h.rencontre(neighborTab.get(i));
 
                             //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de message inter équipe en décommentant les println
@@ -468,9 +457,9 @@ class MyPanel extends JPanel {
 
                         //Début du processus de jeu
                         // appel de la fonction move aléatoire
-                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève de l'ancienne pos 
+                        c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null; // enlève le personnage de l'ancienne pos 
                         
-                        Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // ici h.gePos() == newCoords
+                        Coord newCoords = h.seDeplacer(c.caseDispo(h.getPos(),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type)); // Nouvelle position du personnage
                     
                         c.carte.get(newCoords.getX()).get(newCoords.getY()).personnage = h;
                         System.out.println("ENERGIE FIN DE TOUR: " + h.getEnergie());
@@ -480,13 +469,14 @@ class MyPanel extends JPanel {
                         for(int i=0; i< neighborTab.size(); i++){
                             int rencontre = h.rencontre(neighborTab.get(i));
 
-                            //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de message inter équipe en décommentant les println
-                            //Vous verrez combien de messages ont été echangé
+                            //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de messages inter équipe en décommentant les println
+                            //Vous verrez combien de messages ont été echangés
+
                             //System.out.println("ECHANGE MSG RENCONTRE: " + h.getMessages().size());
                             //System.out.println("\n");
 
 
-                            if(rencontre==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
+                            if(rencontre==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthode gagne le combat 0 s'il perd et meurt
                                 c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
                                 c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type = "O";
                             }
@@ -497,27 +487,28 @@ class MyPanel extends JPanel {
                         }                        
                     }
                     //Win conditions
+                    // ICI MONSIEUR DELEPLANQUE, vous pouvez voir le nombre de messages que le Javatar gagnant possède à la fin de la partie en décommentant les println ci-dessous
                     if(Javatar_terre.getInstance().win()){
                         System.out.println("Bravo la tribu de la terre tu as gagné !");
-                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_terre.getInstance().GetMessage());
+                        //System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_terre.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_feu.getInstance().win()){
                         System.out.println("Bravo la tribu du feu tu as gagné !");
-                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_feu.getInstance().GetMessage());
+                        //System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_feu.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_eau.getInstance().win()){
                         System.out.println("Bravo la tribu de l'eau tu as gagné !");
-                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_eau.getInstance().GetMessage());
+                        //System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_eau.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_air.getInstance().win()){
                         System.out.println("Bravo la tribu de l'air tu as gagné !");
-                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_air.getInstance().GetMessage());
+                        //System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_air.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
@@ -561,24 +552,6 @@ class MyPanel extends JPanel {
                         }
                 }
 
-                // ArrayList<Humain> voisinsListe = c.voisins(h.getPos());
-                
-                // for (Humain v : voisinsListe) {
-                //     if (h.estVivant()) {
-                //         h.rencontre(v);
-                //     }
-                // }
-
-                //si l'individu est en dehors de la safezone , il pert des PE
-                // il est dans la safezone hop hop hop l'érj
-                
-                //Si PE<=20%
-                    
-                //Si un individu est bloqué
-                    //si c'est un obstacle
-                        //perd autant de PE que de pas qu'il aurait dû effectuer
-                    //si c'est un individu 
-                        //déclenche rencontre
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
@@ -592,7 +565,7 @@ class MyPanel extends JPanel {
     });
    
     //Thread qui s'occupe d'actualiser la fenêtre graphique 
-    private Thread processing = new Thread(() -> {//repeint l'écran toutes les 1000/fps ms 
+    private Thread processing = new Thread(() -> {//repeint l'écran toutes les 2000/fps ms 
         while (true) {
             
             this.repaint();
@@ -614,13 +587,6 @@ class MyPanel extends JPanel {
             
             g.drawImage(resultingImage, 0, 0, null);     
             
-            /* 
-            JButton b=new JButton("Click Here");  
-            b.setBounds(50,100,95,30);  
-            b.addActionListener(new ActionListener(){  
-            public void actionPerformed(ActionEvent e){  
-                          
-                    }   });*/
         }
         catch (IOException ex) {
             System.err.println(ex.getMessage());

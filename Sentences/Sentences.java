@@ -1,4 +1,6 @@
 package Sentences;
+
+// Fichier contenant les messages échangés
 public class Sentences {
 
     private static Sentences INSTANCE;

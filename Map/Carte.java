@@ -1,5 +1,6 @@
+package Map;
+
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 import Sentences.Sentences;
 
@@ -7,6 +8,9 @@ import java.lang.Math;
 import java.security.SecureRandom;
 import java.util.*;
 
+
+import Coordonnees.Coord;
+import Personnage.*;
 
 public class Carte {
     public int[] size;
@@ -22,7 +26,7 @@ public class Carte {
     private int V;
     List<List<Node> > adj;
 
-    Carte(int[] s){
+    public Carte(int[] s){
         this.size = s;
         carte = new ArrayList<ArrayList<Case>>();   //tableau double entrée permettant la création de la carte de jeu
         tabPerso = new ArrayList<Humain>();     //Liste de Personnage permettant le choix de l'unité à jouer ensuite, rassemble l'ensemble des personnages en jeu
@@ -35,11 +39,7 @@ public class Carte {
             }
         }
 
-        //1: Définir longueur largeur max de chacunes des aires (si impair laisser au moins 1 case/ si pair laisser 2 cases libres) (paire: (size -2)/2 , impair: (size-1)/2)
-        //2: Incrémenter graduellement la largeur et la longueur des carrés puis regarder si l'aire de l'ensemble des rectangles dépasse le seuil fixé 
-        //   Si l'Aire cumulée des rectangles est supérieure au seuil alors garder la largeur / longueur précédente ou si on a atteint la longueur et la largeur max que chacune des aires peut prendre
-        //3: Une fois que les tailles sont définies il suffit de placer les zones ( Haut-gauche: (X:0->taille_x, Y:0->taille_y),Haut-Droite : (X: tailleMax_x-taille_x->tailleMax,Y:0->taille_y),
-        //   Bas-gauche: (X:0->taille_x,Y: tailleMax_Y-taille_Y->taille_Y), Bas-Droite: (X: tailleMax_x-taille_x->tailleMax_X,Y: tailleMax_Y-taille_Y->taille_Y))
+
         
         //Début de la pose des Obstacles
         int nbCase = size[0] * size[1];
@@ -204,23 +204,27 @@ public class Carte {
         return msg;
     }
     
-    public void placementPersos(ArrayList<Humain> tab, int tX, int tY){
+    public void placementPersos(ArrayList<Humain> tab, int tX, int tY){     //Fonction de placement de personnages dans la Safezone (Premier spawn des personnages)
             for (int i = 0; i<tab.size(); i++){
-                tab.get(i).ajouterMessage(donnePhrase());
-                switch(tab.get(i).getClass().getSimpleName()){
-                    case "Nation_du_feu":
+
+                tab.get(i).ajouterMessage(donnePhrase());   //ajout du message que le personnage aura en connaissance
+
+                switch(tab.get(i).getClass().getSimpleName()){      //Début du Switch case selon les nations
+
+                    case "Nation_du_feu":   
                         int feuX;
                         int feuY;
                         
                         do {
-                            feuX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
-                            feuY = new SecureRandom().nextInt(size[1] - (size[1]-tY)) + (size[1]-tY);
-                        } while (carte.get(feuX).get(feuY).personnage != null || carte.get(feuX).get(feuY).type == "Jf");
-                        tab.get(i).pos.setCoord(feuX,feuY);
-                        carte.get(feuX).get(feuY).personnage = tabPerso.get(i);
+                            feuX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);           //on prend des random coordonnées dans leur SafeZone
+                            feuY = new SecureRandom().nextInt(size[1] - (size[1]-tY)) + (size[1]-tY);           
+                        } while (carte.get(feuX).get(feuY).personnage != null || carte.get(feuX).get(feuY).type == "Jf");   // Ne peut pas etre placé sur les coins car c'est la position du Singleton/Javatar
+                        tab.get(i).setPos(feuX, feuY);                                                                          // ne peut pas etre placé au dessus d'un autre
+                        carte.get(feuX).get(feuY).personnage = tabPerso.get(i);     //Set de la position dans le tableau d'humain qui nous sert à choisir qui va jouer son tour
+                                                                                    //Et Set la position dans la map
+                        break;                                                      //Nous travaillons avec un système de deux tableaux sur lesquels il faut répercuter constamment les actions sur l'un et l'autre
 
-                        break;
-                    case "Nomades_de_l_air":
+                    case "Nomades_de_l_air":        //Meme process pour les autres tribus
                         int airX;
                         int airY;
 
@@ -228,10 +232,11 @@ public class Carte {
                             airX = new SecureRandom().nextInt(tX);
                             airY = new SecureRandom().nextInt(tY);
                         } while (carte.get(airX).get(airY).personnage != null || carte.get(airX).get(airY).type == "Ja");
-                        tab.get(i).pos.setCoord(airX,airY);
+                        tab.get(i).setPos(airX, airY);
                         carte.get(airX).get(airY).personnage = tabPerso.get(i);
                         
                         break;
+
                     case "Royaume_de_la_terre":
                         int terreX;
                         int terreY;
@@ -240,10 +245,11 @@ public class Carte {
                             terreX = new SecureRandom().nextInt(size[0] - (size[0]-tX)) + (size[0]-tX);
                             terreY = new SecureRandom().nextInt(tY);
                         } while (carte.get(terreX).get(terreY).personnage != null || carte.get(terreX).get(terreY).type == "Jt");
-                        tab.get(i).pos.setCoord(terreX, terreY);
+                        tab.get(i).setPos(terreX, terreY);
                         carte.get(terreX).get(terreY).personnage = tabPerso.get(i);
                         
                         break;
+
                     case "Tribus_de_l_eau":
                         int eauX;
                         int eauY;
@@ -252,33 +258,36 @@ public class Carte {
                             eauX = new SecureRandom().nextInt(tX);
                             eauY = new SecureRandom().nextInt(size[0] - (size[0]-tY)) + (size[0]-tY);
                         } while (carte.get(eauX).get(eauY).personnage != null || carte.get(eauX).get(eauY).type == "Je");
-                        tab.get(i).pos.setCoord(eauX, eauY);
+                        tab.get(i).setPos(eauX, eauY);
                         carte.get(eauX).get(eauY).personnage = tabPerso.get(i);
+
                         break;
                 }
                 
             }
-    }        
+    }
 
-    public ArrayList<Coord> caseDispo(Coord coord,String equipe){        //Fonctionnelle - Renvoi les coord des cases dispo
-        ArrayList<Coord> caseDispos = new ArrayList<Coord>();
+    // Ici et apres, fonctions pas marrantes avec gestion des positions afin de nous renvoyer ce que l'on souhaite
+
+    public ArrayList<Coord> caseDispo(Coord coord,String equipe){        //Renvoi les coord des cases dispo autour d'une coordonnée
+        ArrayList<Coord> caseDispos = new ArrayList<Coord>();           
         if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()).personnage ==null){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY())); //
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()));
         }
         if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && (carte.get(coord.getX()+1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()+1).type==equipe)&& carte.get(coord.getX()+1).get(coord.getY()+1).personnage ==null ){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1)); //
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1));
         }
         if(coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()).type=="0"|| carte.get(coord.getX()-1).get(coord.getY()).type==equipe)&& carte.get(coord.getX()-1).get(coord.getY()).personnage ==null){
-            caseDispos.add(new Coord(coord.getX()-1,coord.getY())); //
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()));
         }
         if(coord.getX()>0 &&  coord.getY()<size[1]-1 && (carte.get(coord.getX()-1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()+1).type==equipe )&& carte.get(coord.getX()-1).get(coord.getY()+1).personnage ==null){
-            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1)); //
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1));
         }
         if(coord.getY()<size[1]-1 && (carte.get(coord.getX()).get(coord.getY()+1).type=="0"|| carte.get(coord.getX()).get(coord.getY()+1).type==equipe)&& carte.get(coord.getX()).get(coord.getY()+1).personnage ==null){
-            caseDispos.add(new Coord(coord.getX(),coord.getY()+1)); //
+            caseDispos.add(new Coord(coord.getX(),coord.getY()+1));
         }
         if(coord.getY()>0 && coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()-1).type==equipe)&& carte.get(coord.getX()+1).get(coord.getY()-1).personnage ==null){
-            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1)); //
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1));
         }
         if(coord.getY()>0 && (carte.get(coord.getX()).get(coord.getY()-1).type=="0" || carte.get(coord.getX()).get(coord.getY()-1).type==equipe)&& carte.get(coord.getX()).get(coord.getY()-1).personnage ==null){
             caseDispos.add(new Coord(coord.getX(),coord.getY()-1));
@@ -289,7 +298,7 @@ public class Carte {
         return caseDispos;
     }
 
-    public ArrayList<Humain> caseRencontre(Coord coord,String equipe){        //Fonctionnelle - Renvoi un tebleau avec les références des humains autour
+    public ArrayList<Humain> caseRencontre(Coord coord,String equipe){        //Renvoi un tableau avec les références des humains autour d'un coordonnée
         ArrayList<Humain> neighborTab = new ArrayList<Humain>();
         if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe) && carte.get(coord.getX()+1).get(coord.getY()).personnage !=null){
             neighborTab.add(carte.get(coord.getX()+1).get(coord.getY()).personnage);
@@ -318,7 +327,7 @@ public class Carte {
         return neighborTab;
     }
 
-    public ArrayList<Coord> caseDispoDjikstra(Coord coord,String equipe){        //Fonctionnelle - Renvoi les coord des cases dispo
+    public ArrayList<Coord> caseDispoDjikstra(Coord coord,String equipe){        //Renvoi les coord des cases dispo autour d'une coordonnée, utilisée différemment pour Djikstra
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();
         if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe)){
             caseDispos.add(new Coord(coord.getX()+1,coord.getY())); //
@@ -347,7 +356,7 @@ public class Carte {
         return caseDispos;
     }
 
-    public ArrayList<Humain> voisins(Coord coord) {     //Renvoi un tableau de 
+    public ArrayList<Humain> voisins(Coord coord) {     //Renvoi un tableau de voisins pour une coordonnée donnée
         ArrayList<Humain> h = new ArrayList<Humain>();
         int x = coord.getX();
         int y = coord.getY();
@@ -488,7 +497,7 @@ public class Carte {
     {
         List<List<Node> > adj = new ArrayList<List<Node> >();
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();    
-        int dep=0;
+        //int dep;
         int des=0;
         int it=0;
         int itNode=0;
@@ -496,12 +505,13 @@ public class Carte {
             = new ArrayList<List<Node> >();
         for (int i = 0; i < size[0]; i++) {
             for (int y = 0; y < size[1]; y++) {
-                if(depart.getY()==i && depart.getX()==y){
+                /*if(depart.getY()==i && depart.getX()==y){
                     dep=it;
-                }
+                }*/
                 if(dest.getY()==i && dest.getX()==y){
                     des=it;
                 }
+
                 if(carte.get(i).get(y).type== "0" ||carte.get(i).get(y).type== equipe ||carte.get(i).get(y).personnage != null){
                     adj.add(new ArrayList<Node>());
                     caseDispos=caseDispoDjikstra(new Coord(i, y),equipe);
@@ -528,15 +538,16 @@ public class Carte {
         this.settled = new HashSet<Integer>();
         this.pq = new PriorityQueue<Node>(V, new Node());
         caseDispos=caseDispo(depart,equipe);
-        //dijkstra(adj,dep);
+
         //System.out.println(dist[des]+"pour");
+
         for (int j = 0; j < caseDispos.size(); j++) {
             this.V = itNode;
             this.dist = new int[V];
             this.settled = new HashSet<Integer>();
             this.pq = new PriorityQueue<Node>(V, new Node());
+
             dijkstra(adj,caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]));
-            Coord sortsave =new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
             if(distCompare<0 || dist[des]<distCompare ){
                 distCompare=dist[des];
                 sortie=new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
