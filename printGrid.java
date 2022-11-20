@@ -374,77 +374,97 @@ class MyPanel extends JPanel {
 
                 
                 if( c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage != null){
+                    //Si dans sa SafeZone
+                    if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
+                        System.out.println("Dans la safe zone \n \n");
+                        h.setEnergie(50);
+                        switch (h.getEquipe()){     // Pour échange de messages avec le javatar de l'équipe et verif de la win condition
+                            case "A":
+                                Javatar_air.getInstance().SetMessage(h.getMessages());
+
+                                //Monsieur DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
+                                //System.out.println("Echange msg AIR");
+                                System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
+                                //System.out.print(Javatar_air.getInstance().GetMessage());
+                                System.out.println("\n");
+
+
+                                
+                                break;
+
+                            case "E":
+                                Javatar_eau.getInstance().SetMessage(h.getMessages());
+                                //System.out.println("Echange msg EAU");
+                                System.out.println("MSG JAVATAR EAU: " + Javatar_eau.getInstance().GetNbMessage());
+                                //System.out.print(Javatar_eau.getInstance().GetMessage());
+                                System.out.println("\n");
+
+                                break;
+                            case "T":
+                                Javatar_terre.getInstance().SetMessage(h.getMessages());
+                                //System.out.println("Echange msg TERRE");
+                                System.out.println("MSG JAVATAR TERRE: " + Javatar_terre.getInstance().GetNbMessage());
+                                //System.out.println(Javatar_terre.getInstance().GetMessage());
+                                System.out.println("\n");
+
+                                break;
+                            case "F":
+                                Javatar_feu.getInstance().SetMessage(h.getMessages());
+                                //System.out.println("Echange msg FEU");
+                                System.out.println("MSG JAVATAR FEU: " + Javatar_feu.getInstance().GetNbMessage());
+                                //System.out.println(Javatar_feu.getInstance().GetMessage());
+                                System.out.println("\n");
+
+                                break;
+                        }
+                    }
                     //Si PE <=20%
-                    if(h.getEnergie()<20) 
+                    if(h.getEnergie()<=20) 
                     {
                         System.out.println("DJJJJJJJJJJJJJJJJJJJJJJJJJJJIKSTRA");
                         ArrayList<Coord> deplacement=new ArrayList<Coord>();
                         //appel de la fonction move vers la safezone
                         switch (c.tabPerso.get(index).getEquipe()){
                             case "A":
-                                deplacement.add(c.matrice(h.getPos(),new Coord(0,0)));
+                                deplacement.add(c.matrice(h.getPos(),new Coord(1,1),"A"));
                                 break;
                             case "E":
-                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,0)));
+                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-2,1),"E"));
                                 break;
                             case "T":
-                                deplacement.add(c.matrice(h.getPos(),new Coord(0,c.size[1]-1)));
+                                deplacement.add(c.matrice(h.getPos(),new Coord(1,c.size[1]-2),"T"));
                                 break;
                             case "F":
-                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-1,c.size[1]-1)));
+                                deplacement.add(c.matrice(h.getPos(),new Coord(c.size[0]-2,c.size[1]-2),"F"));
                                 break;
                         }
                         c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
                         h.seDeplacer(deplacement);
                         c.carte.get(deplacement.get(0).getX()).get(deplacement.get(0).getY()).personnage=h;
+                        ArrayList<Humain> neighborTab = new ArrayList<Humain>();
+                        neighborTab=c.caseRencontre(deplacement.get(0),c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type);
+
+                        for(int i=0; i< neighborTab.size(); i++){
+                            int rencontre = h.rencontre(neighborTab.get(i));
+
+                            //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de message inter équipe en décommentant les println
+                            //Vous verrez combien de messages ont été echangé
+                            //System.out.println("ECHANGE MSG RENCONTRE: " + h.getMessages().size());
+                            //System.out.println("\n");
+
+
+                            if(rencontre==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
+                                c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
+                                c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type = "O";
+                            }
+                            else if(rencontre==1){
+                                c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).personnage = null;
+                                c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).type = "O";
+                            }
+                        }   
                     } 
                     else 
                     {
-                        //Si dans sa SafeZone
-                        if(c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type == h.getEquipe()){
-                            System.out.println("Dans la safe zone \n \n");
-                            h.setEnergie(100);
-                            switch (h.getEquipe()){     // Pour échange de messages avec le javatar de l'équipe et verif de la win condition
-                                case "A":
-                                    Javatar_air.getInstance().SetMessage(h.getMessages());
-
-                                    //Monsieur DELEPLANQUE si vous voulez tester les messages (échange et totaux) décommenter les 3 lignes suivantes pour chaque équipe
-                                    //System.out.println("Echange msg AIR");
-                                    System.out.println("MSG JAVATAR AIR: " + Javatar_air.getInstance().GetNbMessage());
-                                    //System.out.print(Javatar_air.getInstance().GetMessage());
-                                    System.out.println("\n");
-
-
-                                    
-                                    break;
-
-                                case "E":
-                                    Javatar_eau.getInstance().SetMessage(h.getMessages());
-                                    //System.out.println("Echange msg EAU");
-                                    System.out.println("MSG JAVATAR EAU: " + Javatar_eau.getInstance().GetNbMessage());
-                                    //System.out.print(Javatar_eau.getInstance().GetMessage());
-                                    System.out.println("\n");
-
-                                    break;
-                                case "T":
-                                    Javatar_terre.getInstance().SetMessage(h.getMessages());
-                                    //System.out.println("Echange msg TERRE");
-                                    System.out.println("MSG JAVATAR TERRE: " + Javatar_terre.getInstance().GetNbMessage());
-                                    //System.out.println(Javatar_terre.getInstance().GetMessage());
-                                    System.out.println("\n");
-
-                                    break;
-                                case "F":
-                                    Javatar_feu.getInstance().SetMessage(h.getMessages());
-                                    //System.out.println("Echange msg FEU");
-                                    System.out.println("MSG JAVATAR FEU: " + Javatar_feu.getInstance().GetNbMessage());
-                                    //System.out.println(Javatar_feu.getInstance().GetMessage());
-                                    System.out.println("\n");
-
-                                    break;
-                            }
-                            
-                        }
 
                         //Début du processus de jeu
                         // appel de la fonction move aléatoire
@@ -457,13 +477,14 @@ class MyPanel extends JPanel {
                         ArrayList<Humain> neighborTab = new ArrayList<Humain>();
                         neighborTab=c.caseRencontre(newCoords,c.carte.get(h.getPos().getX()).get(h.getPos().getY()).type);
 
-                        /*for(int i=0; i< neighborTab.size(); i++){
+                        for(int i=0; i< neighborTab.size(); i++){
                             int rencontre = h.rencontre(neighborTab.get(i));
 
                             //Ici Monsieur DELEPLANQUE, vous pouvez tester l'échange de message inter équipe en décommentant les println
                             //Vous verrez combien de messages ont été echangé
                             //System.out.println("ECHANGE MSG RENCONTRE: " + h.getMessages().size());
                             //System.out.println("\n");
+
 
                             if(rencontre==0){    //La méthode rencontre renvoi 1 si l'objet appelant la méthod gagne le combat 0 s'il perd et meurt
                                 c.carte.get(h.getPos().getX()).get(h.getPos().getY()).personnage = null;
@@ -473,27 +494,30 @@ class MyPanel extends JPanel {
                                 c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).personnage = null;
                                 c.carte.get(neighborTab.get(i).getPos().getX()).get(neighborTab.get(i).getPos().getY()).type = "O";
                             }
-                        }*/
-                        
+                        }                        
                     }
                     //Win conditions
                     if(Javatar_terre.getInstance().win()){
                         System.out.println("Bravo la tribu de la terre tu as gagné !");
+                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_terre.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_feu.getInstance().win()){
                         System.out.println("Bravo la tribu du feu tu as gagné !");
+                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_feu.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_eau.getInstance().win()){
                         System.out.println("Bravo la tribu de l'eau tu as gagné !");
+                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_eau.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
                     if(Javatar_air.getInstance().win()){
                         System.out.println("Bravo la tribu de l'air tu as gagné !");
+                        System.out.println("ECHANGE MSG RENCONTRE: " + Javatar_air.getInstance().GetMessage());
                         continuer=false;
                         break;
                     }
@@ -521,15 +545,19 @@ class MyPanel extends JPanel {
                             case 0:
                                 System.out.println("Bravo la tribu de l'air tu as gagné !");
                                 continuer=false;
+                                break;
                             case 1:
                                 System.out.println("Bravo la tribu de la terre tu as gagné !");
                                 continuer=false;
+                                break;
                             case 2:
                                 System.out.println("Bravo la tribu de l'eau tu as gagné !");  
-                                continuer=false; 
+                                continuer=false;
+                                break;
                             case 3:
                                 System.out.println("Bravo la tribu du feu tu as gagné !");
                                 continuer=false;
+                                break;
                         }
                 }
 

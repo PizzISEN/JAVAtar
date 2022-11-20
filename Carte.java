@@ -43,7 +43,7 @@ public class Carte {
         
         //Début de la pose des Obstacles
         int nbCase = size[0] * size[1];
-        double nbObstacle = Math.floor(nbCase * 0.12);
+        double nbObstacle = Math.floor(nbCase * 0.05);
         for (int o=0; o<nbObstacle; o++){
             int randX = new SecureRandom().nextInt(size[0]);
             int randY = new SecureRandom().nextInt(size[1]);
@@ -318,6 +318,35 @@ public class Carte {
         return neighborTab;
     }
 
+    public ArrayList<Coord> caseDispoDjikstra(Coord coord,String equipe){        //Fonctionnelle - Renvoi les coord des cases dispo
+        ArrayList<Coord> caseDispos = new ArrayList<Coord>();
+        if(coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()).type=="0" || carte.get(coord.getX()+1).get(coord.getY()).type==equipe)){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY())); //
+        }
+        if(coord.getX()<size[0]-1 && coord.getY()<size[1]-1 && (carte.get(coord.getX()+1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()+1).type==equipe)){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()+1)); //
+        }
+        if(coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()).type=="0"|| carte.get(coord.getX()-1).get(coord.getY()).type==equipe)){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY())); //
+        }
+        if(coord.getX()>0 &&  coord.getY()<size[1]-1 && (carte.get(coord.getX()-1).get(coord.getY()+1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()+1).type==equipe )){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()+1)); //
+        }
+        if(coord.getY()<size[1]-1 && (carte.get(coord.getX()).get(coord.getY()+1).type=="0"|| carte.get(coord.getX()).get(coord.getY()+1).type==equipe)){
+            caseDispos.add(new Coord(coord.getX(),coord.getY()+1)); //
+        }
+        if(coord.getY()>0 && coord.getX()<size[0]-1 && (carte.get(coord.getX()+1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()+1).get(coord.getY()-1).type==equipe)){
+            caseDispos.add(new Coord(coord.getX()+1,coord.getY()-1)); //
+        }
+        if(coord.getY()>0 && (carte.get(coord.getX()).get(coord.getY()-1).type=="0" || carte.get(coord.getX()).get(coord.getY()-1).type==equipe)){
+            caseDispos.add(new Coord(coord.getX(),coord.getY()-1));
+        }
+        if(coord.getY()>0 && coord.getX()>0 && (carte.get(coord.getX()-1).get(coord.getY()-1).type=="0" || carte.get(coord.getX()-1).get(coord.getY()-1).type==equipe)){
+            caseDispos.add(new Coord(coord.getX()-1,coord.getY()-1));
+        }
+        return caseDispos;
+    }
+
     public ArrayList<Humain> voisins(Coord coord) {     //Renvoi un tableau de 
         ArrayList<Humain> h = new ArrayList<Humain>();
         int x = coord.getX();
@@ -455,7 +484,7 @@ public class Carte {
         }
     }
  
-    public Coord matrice(Coord depart,Coord dest)
+    public Coord matrice(Coord depart,Coord dest,String equipe)
     {
         List<List<Node> > adj = new ArrayList<List<Node> >();
         ArrayList<Coord> caseDispos = new ArrayList<Coord>();    
@@ -467,15 +496,15 @@ public class Carte {
             = new ArrayList<List<Node> >();
         for (int i = 0; i < size[0]; i++) {
             for (int y = 0; y < size[1]; y++) {
-                if(depart.getX()==i && depart.getY()==y){
+                if(depart.getY()==i && depart.getX()==y){
                     dep=it;
                 }
-                if(dest.getX()==i && dest.getY()==y){
+                if(dest.getY()==i && dest.getX()==y){
                     des=it;
                 }
-                if(carte.get(i).get(y).type== "0" && carte.get(i).get(y).personnage == null){
+                if(carte.get(i).get(y).type== "0" ||carte.get(i).get(y).type== equipe ||carte.get(i).get(y).personnage != null){
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
+                    caseDispos=caseDispoDjikstra(new Coord(i, y),equipe);
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]),1));
                     }
@@ -483,7 +512,7 @@ public class Carte {
                 }
                 else{
                     adj.add(new ArrayList<Node>());
-                    caseDispos=caseDispo(new Coord(i, y),carte.get(i).get(y).type);
+                    caseDispos=caseDispoDjikstra(new Coord(i, y),equipe);
                     for (int j = 0; j < caseDispos.size(); j++) {
                         adj.get(itNode).add(new Node(caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]),99));
                     }
@@ -498,12 +527,18 @@ public class Carte {
         Coord sortie = new Coord();
         this.settled = new HashSet<Integer>();
         this.pq = new PriorityQueue<Node>(V, new Node());
-        caseDispos=caseDispo(depart,carte.get(depart.getX()).get(depart.getY()).type);
+        caseDispos=caseDispo(depart,equipe);
+        //dijkstra(adj,dep);
+        //System.out.println(dist[des]+"pour");
         for (int j = 0; j < caseDispos.size(); j++) {
+            this.V = itNode;
+            this.dist = new int[V];
+            this.settled = new HashSet<Integer>();
+            this.pq = new PriorityQueue<Node>(V, new Node());
             dijkstra(adj,caseDispos.get(j).getY()+(caseDispos.get(j).getX()*size[0]));
+            Coord sortsave =new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
             if(distCompare<0 || dist[des]<distCompare ){
                 distCompare=dist[des];
-                System.out.println(distCompare+"la nouvelle distance");
                 sortie=new Coord(caseDispos.get(j).getX(),(caseDispos.get(j).getY()));
             }
         }

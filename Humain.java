@@ -9,7 +9,7 @@ public abstract class Humain {
 
     public Humain(int x, int y) {
         this.pos.setCoord(x, y);
-        this.energie = 100;
+        this.energie = 50;
         this.vivant = true;
     }
 
@@ -74,7 +74,7 @@ public abstract class Humain {
             x = casesDispo.get(randomIndex).getX();
             y = casesDispo.get(randomIndex).getY();;
             //System.out.println("Moved to coords: " + x + " " + y);
-            this.energie -= 5;
+            this.energie -= 1;
             //System.out.println(x+" "+y+" "+this.pos.getX()+" "+this.pos.getY()+" ");
             this.pos.setCoord(x, y);
         }
